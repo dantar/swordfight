@@ -5,12 +5,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ThemeToggleComponent } from './components/buttons/theme-toggle/theme-toggle.component';
 import { FullscreenToggleComponent } from './components/buttons/fullscreen-toggle/fullscreen-toggle.component';
+import { BoxedSwordComponent } from './components/button/boxed-sword/boxed-sword.component';
+import { DuelButtonsComponent } from './components/main/duel-buttons/duel-buttons.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ThemeToggleComponent,
-    FullscreenToggleComponent
+    FullscreenToggleComponent,
+    BoxedSwordComponent,
+    DuelButtonsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,5 @@
+<svg class="fullsvg" viewBox="0 0 100 100">
+    <g *ngFor="let button of buttons" [attr.transform]="transform(button)">
+        <g app-boxed-sword [action]="button"></g>
+    </g>
+</svg>
