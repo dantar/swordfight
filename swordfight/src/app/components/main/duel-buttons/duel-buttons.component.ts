@@ -21,69 +21,49 @@ import {
       // states
       state('rest', style({
         transform: 'translate(90px,80px) scale(1) rotate(15deg)',
-        opacity: 1,
-        backgroundColor: 'yellow'
       })),
       state('swingA', style({
         transform: 'translate(25px,25px) scale(0.5) rotate(-60deg)',
-        opacity: 0.3,
-        backgroundColor: 'red'
       })),
       state('swingB', style({
         transform: 'translate(75px,25px) scale(0.5) rotate(60deg)',
-        opacity: 0.8,
-        backgroundColor: 'red'
       })),
       state('swingC', style({
         transform: 'translate(25px,75px) scale(0.5) rotate(210deg)',
-        opacity: 0.8,
-        backgroundColor: 'red'
       })),
       state('swingD', style({
         transform: 'translate(75px,75px) scale(0.5) rotate(120deg)',
-        opacity: 0.8,
-        backgroundColor: 'red'
       })),
       // transitions
-      transition('* => swingA', animate('300ms')),
-      transition('* => swingB', animate('300ms')),
-      transition('* => swingC', animate('300ms')),
-      transition('* => swingD', animate('300ms')),
+      transition('* => swingA', animate('250ms')),
+      transition('* => swingB', animate('250ms')),
+      transition('* => swingC', animate('250ms')),
+      transition('* => swingD', animate('250ms')),
       transition('* => rest', animate('1000ms')),
     ]),
     trigger('theenemy', [
       // states
       state('rest', style({
         transform: 'translate(50px,20px) scale(0.3) rotate(-15deg)',
-        opacity: 1,
-        backgroundColor: 'yellow'
       })),
       state('swingA', style({
         transform: 'translate(25px,25px) scale(0.5) rotate(30deg)',
-        opacity: 0.3,
-        backgroundColor: 'red'
       })),
       state('swingB', style({
         transform: 'translate(75px,25px) scale(0.5) rotate(150deg)',
-        opacity: 0.8,
-        backgroundColor: 'red'
       })),
       state('swingC', style({
         transform: 'translate(25px,75px) scale(0.5) rotate(300deg)',
-        opacity: 0.8,
-        backgroundColor: 'red'
       })),
       state('swingD', style({
         transform: 'translate(75px,75px) scale(0.5) rotate(210deg)',
-        opacity: 0.8,
-        backgroundColor: 'red'
       })),
       // transitions
-      transition('* => swingA', animate('1000ms')),
-      transition('* => swingB', animate('1000ms')),
-      transition('* => swingC', animate('1000ms')),
-      transition('* => swingD', animate('1000ms')),
-      transition('* => rest', animate('1000ms')),
+      transition('* => swingA', animate('800ms')),
+      transition('* => swingB', animate('800ms')),
+      transition('* => swingC', animate('800ms')),
+      transition('* => swingD', animate('800ms')),
+      transition('* => rest', animate('800ms')),
     ]),
   ],
 })
@@ -103,8 +83,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   constructor(
     private games: GamesCommonService,
     private audio: AudioPlayService,
-    private shared: SharedDataService,
-    private changes: ChangeDetectorRef,
   ) { }
 
   ngOnDestroy(): void {
@@ -122,13 +100,18 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.play('ls-ready');
     this.audio.loop('ls-study');
     this.audio.setTheme('battle1');
-    this.finishedSequence();
+    this.finishedSequence(true);
   }
 
   levelUp() {
     this.step = 0;
     this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
     this.sequence.push(this.lastPicked);
+    this.enemyState = this.sequence[this.step];
+  }
+
+  sameLevel() {
+    this.step = 0;
     this.enemyState = this.sequence[this.step];
   }
 
@@ -175,24 +158,27 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     if (this.current(this.currentAction)) {
       this.step++;
       if (this.step >= this.sequence.length) {
-        this.finishedSequence()
+        this.finishedSequence(true)
       } else {
         this.enemyState = this.sequence[this.step];
       }
     } else {
       this.audio.play('grunt1');
-      this.finishedSequence();
+      this.finishedSequence(false);
     }
   }
-  finishedSequence() {
+  finishedSequence(won: boolean) {
     this.swordState = 'rest';
     this.enemyState = 'rest';
     this.ready = false;
     this.ticker = setInterval(() => {
       clearInterval(this.ticker);
-      this.changes.detectChanges();
       this.ready = true;
-      this.levelUp();
+      if (won) {
+        this.levelUp()
+      } else {
+        this.sameLevel();
+      };
     }, 2000);
   }
 
