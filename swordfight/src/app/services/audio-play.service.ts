@@ -16,6 +16,7 @@ export class AudioPlayService {
     this.register('ls-study', 'assets/lightsabre/study.ogg');
     this.register('action', 'assets/action.ogg');
     this.register('theme-01', 'assets/theme-01.mp3');
+    this.register('battle1', 'assets/lightsabre/battle1.ogg');
   }
 
   register(name: string, src: string) {
@@ -32,23 +33,64 @@ export class AudioPlayService {
     audio.play();
   }
 
-  theme(name: string) {
+  loop(name: string) {
+    let audio = this.audios[name];
+    audio.pause();
+    audio.currentTime = 0;
+    this._looper(audio);
+    audio.play();
+  }
+
+  stop(name: string) {
+    let audio = this.audios[name];
+    audio.pause();
+  }
+
+  setTheme(name: string) {
+    let playing = false;
     if (this.currentTheme) {
-      this.currentTheme.pause();
+      if (!this.currentTheme.paused) {
+        playing = true;
+        this.currentTheme.pause();
+      }
       this.currentTheme.currentTime = 0;
     }
-    if (name && this.audios[name]) {
+    if (this.audios[name]) {
       this.currentTheme = this.audios[name];
-      this.currentTheme.play();
-      this.currentTheme.loop = true;
-      this.currentTheme.addEventListener('timeupdate', function () {
-        var buffer = 1;
-        if (this.currentTime > this.duration - buffer) {
-          this.currentTime = 0
-          this.play()
-        }
-      });
+      this.currentTheme.volume = 0.2;
+      this._looper(this.currentTheme);
+      if (playing) {
+        this.currentTheme.play();
+      }
     }
+
+  }
+
+  theme(name?: string) {
+    if (name) {
+      this.setTheme(name);
+    }
+    if (this.currentTheme) {
+      this._looper(this.currentTheme);
+      this.currentTheme.play();
+    }
+  }
+
+  stopTheme() {
+    if (this.currentTheme) {
+      this.currentTheme.pause();
+    }
+  }
+
+  _looper(a: HTMLAudioElement) {
+    //a.loop = true;
+    a.addEventListener('timeupdate', function () {
+      var buffer = 0.40;
+      if (this.currentTime > this.duration - buffer) {
+        this.currentTime = 0;
+        this.play();
+      }
+    });
   }
 
 }

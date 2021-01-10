@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-theme-toggle',
@@ -10,7 +11,10 @@ export class ThemeToggleComponent implements OnInit, OnDestroy {
 
   enabled: boolean;
 
-  constructor(private audio: AudioPlayService) {}
+  constructor(
+    private shared: SharedDataService,
+    private audio: AudioPlayService,
+    ) {}
 
   ngOnInit(): void {
     this.enabled = false;
@@ -19,15 +23,15 @@ export class ThemeToggleComponent implements OnInit, OnDestroy {
   toggleEnabled() {
     this.enabled = !this.enabled;
     if (this.enabled) {
-      this.audio.theme('theme-01');
+      this.audio.theme();
     } else {
-      this.audio.theme(null);
+      this.audio.stopTheme();
     }
   }
 
   ngOnDestroy(): void {
     this.enabled = false;
-    this.audio.theme(null);
+    this.audio.stopTheme();
   }
 
 }

@@ -5,7 +5,8 @@ import { LandingPageComponent } from './components/main/landing-page/landing-pag
 
 
 const routes: Routes = [
-  {path: '', component: LandingPageComponent}
+  {path: '', component: LandingPageComponent},
+  {path: 'fight', component: DuelButtonsComponent},
 ];
 
 @NgModule({

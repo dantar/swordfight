@@ -8,6 +8,7 @@ import { FullscreenToggleComponent } from './components/buttons/fullscreen-toggl
 import { BoxedSwordComponent } from './components/button/boxed-sword/boxed-sword.component';
 import { DuelButtonsComponent } from './components/main/duel-buttons/duel-buttons.component';
 import { LandingPageComponent } from './components/main/landing-page/landing-page.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { LandingPageComponent } from './components/main/landing-page/landing-pag
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

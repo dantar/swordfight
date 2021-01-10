@@ -1,19 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
 import { GamesCommonService } from 'src/app/services/games-common.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-duel-buttons',
   templateUrl: './duel-buttons.component.html',
   styleUrls: ['./duel-buttons.component.scss']
 })
-export class DuelButtonsComponent implements OnInit {
+export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   constructor(
     private games: GamesCommonService,
     private audio: AudioPlayService,
+    private shared: SharedDataService,
     ) { }
+
+  ngOnDestroy(): void {
+    this.audio.stop('ls-study');
+  }
 
   buttons: ActionButton[]
   sequence: string[];
@@ -31,7 +37,8 @@ export class DuelButtonsComponent implements OnInit {
     this.level = 0;
     this.levelUp();
     this.audio.play('ls-ready');
-    this.audio.theme('ls-study');
+    this.audio.loop('ls-study');
+    this.audio.setTheme('battle1');
   }
 
   levelUp() {
