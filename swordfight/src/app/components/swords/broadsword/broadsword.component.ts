@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: '[app-broadsword]',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./broadsword.component.scss']
 })
 export class BroadswordComponent implements OnInit {
+
+  @Input() color: string;
 
   constructor() { }
 

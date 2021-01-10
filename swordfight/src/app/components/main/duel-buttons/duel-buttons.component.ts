@@ -45,36 +45,36 @@ import {
         backgroundColor: 'red'
       })),
       // transitions
-      transition('* => swingA', animate('400ms')),
-      transition('* => swingB', animate('400ms')),
-      transition('* => swingC', animate('400ms')),
-      transition('* => swingD', animate('400ms')),
-      transition('* => rest', animate('400ms')),
+      transition('* => swingA', animate('300ms')),
+      transition('* => swingB', animate('300ms')),
+      transition('* => swingC', animate('300ms')),
+      transition('* => swingD', animate('300ms')),
+      transition('* => rest', animate('1000ms')),
     ]),
     trigger('theenemy', [
       // states
       state('rest', style({
-        transform: 'translate(50px,20px) scale(0.5) rotate(-15deg)',
+        transform: 'translate(50px,20px) scale(0.3) rotate(-15deg)',
         opacity: 1,
         backgroundColor: 'yellow'
       })),
       state('swingA', style({
-        transform: 'translate(25px,25px) scale(0.5) rotate(-60deg)',
+        transform: 'translate(25px,25px) scale(0.5) rotate(30deg)',
         opacity: 0.3,
         backgroundColor: 'red'
       })),
       state('swingB', style({
-        transform: 'translate(75px,25px) scale(0.5) rotate(60deg)',
+        transform: 'translate(75px,25px) scale(0.5) rotate(150deg)',
         opacity: 0.8,
         backgroundColor: 'red'
       })),
       state('swingC', style({
-        transform: 'translate(25px,75px) scale(0.5) rotate(210deg)',
+        transform: 'translate(25px,75px) scale(0.5) rotate(300deg)',
         opacity: 0.8,
         backgroundColor: 'red'
       })),
       state('swingD', style({
-        transform: 'translate(75px,75px) scale(0.5) rotate(120deg)',
+        transform: 'translate(75px,75px) scale(0.5) rotate(210deg)',
         opacity: 0.8,
         backgroundColor: 'red'
       })),
@@ -83,12 +83,13 @@ import {
       transition('* => swingB', animate('1000ms')),
       transition('* => swingC', animate('1000ms')),
       transition('* => swingD', animate('1000ms')),
-      transition('* => rest', animate('3000ms')),
+      transition('* => rest', animate('1000ms')),
     ]),
   ],
 })
 export class DuelButtonsComponent implements OnInit, OnDestroy {
 
+  ready: boolean;
   currentAction: ActionButton;
   buttons: ActionButton[]
   sequence: string[];
@@ -121,8 +122,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.play('ls-ready');
     this.audio.loop('ls-study');
     this.audio.setTheme('battle1');
-    this.swordState = 'rest';
-    this.enemyState = 'rest';
+    this.finishedSequence();
   }
 
   levelUp() {
@@ -130,6 +130,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.level++;
     this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
     this.sequence.push(this.lastPicked);
+    this.enemyState = this.sequence[this.step];
   }
 
   transform(button: ActionButton): string {
@@ -146,11 +147,16 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   clickAction(button: ActionButton) {
     this.audio.play('action');
-    this.currentAction = button;
-    if (this.swordState == this.currentAction.name) {
-      this.swordState = 'rest';
+    if (this.ready) {
+      this.currentAction = button;
+      if (this.swordState == this.currentAction.name) {
+        this.swordState = 'rest';
+      } else {
+        this.swordState = this.currentAction.name;
+      }
     } else {
-      this.swordState = this.currentAction.name;
+      this.ready = true;
+      this.levelUp();
     }
   }
 
@@ -170,13 +176,20 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     if (this.current(this.currentAction)) {
       this.step++;
       if (this.step >= this.sequence.length) {
-        this.levelUp();
+        this.finishedSequence()
+      } else {
+        this.enemyState = this.sequence[this.step];
       }
-      this.enemyState = this.sequence[this.step];
     } else {
       this.audio.play('grunt1');
       this.step = 0;
+      this.finishedSequence();
     }
+  }
+  finishedSequence() {
+    this.swordState = 'rest';
+    this.enemyState = 'rest';
+    this.ready = false;
   }
 
 }
