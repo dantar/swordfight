@@ -1,0 +1,4 @@
+<svg *ngIf="!fight" class="fullsvg" viewBox="0 0 100 100">
+    <g app-boxed-sword [action]="button" (click)="clickButton(button)"></g>
+</svg>
+<app-duel-buttons *ngIf="fight"></app-duel-buttons>

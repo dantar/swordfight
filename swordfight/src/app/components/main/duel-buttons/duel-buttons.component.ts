@@ -30,6 +30,8 @@ export class DuelButtonsComponent implements OnInit {
     this.sequence = [];
     this.level = 0;
     this.levelUp();
+    this.audio.play('ls-ready');
+    this.audio.theme('ls-study');
   }
 
   levelUp() {
@@ -52,7 +54,7 @@ export class DuelButtonsComponent implements OnInit {
   }
 
   clickAction(button: ActionButton) {
-    this.audio.play('action');
+    this.audio.play('ls-block1');
     if (this.current(button)) {
       this.step ++;
       if (this.step >= this.sequence.length) {
