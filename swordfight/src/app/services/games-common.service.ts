@@ -7,7 +7,7 @@ export class GamesCommonService {
 
   constructor() { }
 
-  shuffle(a: any[]) {
+  shuffle<T>(a: T[]):void {
     GamesCommonService.shuffle(a);
   }
 
@@ -15,11 +15,15 @@ export class GamesCommonService {
     return GamesCommonService.randomInt(min, max);
   }
 
-  randomPop(a: any[]): any {
+  randomPop<T>(a: T[]): T {
     return GamesCommonService.randomPop(a);
   }
 
-  static shuffle(a: any[]) {
+  randomPick<T>(a: T[]): T {
+    return GamesCommonService.randomPick(a);
+  }
+
+  static shuffle<T>(a: T[]): void {
     let rindex: number;
     for (let index = a.length; index > 1 ; index--) {
       rindex = this.randomInt(0, index - 1);
@@ -32,9 +36,12 @@ export class GamesCommonService {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  static randomPop(a: any[]): any {
+  static randomPop<T>(a: T[]): T {
     return a.splice(this.randomInt(0, a.length-1), 1)[0];
   }
 
+  static randomPick<T>(a: T[]): T {
+    return a[this.randomInt(0, a.length-1)];
+  }
 
 }

@@ -8,13 +8,13 @@ TODAY=`date +%Y-%m-%d-%H-%M-%S`
 echo $TODAY
 
 HACKGIT=~/hack/git
-
+NGDIR=$HACKGIT/swordfight/swordfight
 export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
 REMOTE="ssh dantar "
 
-cd $HACKGIT/swordfight
+cd $NGDIR
 ng build --base-href=./ --prod
 
-rsync --delete -varzh $HACKGIT/swordfight/dist/swordfight/* dantar:/home/daniele/html/swordfight/
+rsync --delete -varzh $NGDIR/dist/swordfight/* dantar:/home/daniele/html/swordfight/
 
