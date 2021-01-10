@@ -13,10 +13,13 @@ export class AudioPlayService {
     this.register('ls-ready', 'assets/lightsabre/ready.ogg');
     this.register('ls-block1', 'assets/lightsabre/block1.ogg');
     this.register('ls-block2', 'assets/lightsabre/block2.ogg');
+    this.register('ls-block3', 'assets/lightsabre/block3.ogg');
+    this.register('ls-block4', 'assets/lightsabre/block4.ogg');
     this.register('ls-study', 'assets/lightsabre/study.ogg');
     this.register('action', 'assets/action.ogg');
     this.register('theme-01', 'assets/theme-01.mp3');
     this.register('battle1', 'assets/lightsabre/battle1.ogg');
+    this.register('grunt1', 'assets/lightsabre/grunt1.ogg');
   }
 
   register(name: string, src: string) {

@@ -9,4 +9,5 @@ export class ActionButton {
     y: number;
     scale: number;
     color: string;
+    sound: string;
 }

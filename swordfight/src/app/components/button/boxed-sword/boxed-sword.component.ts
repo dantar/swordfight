@@ -8,7 +8,7 @@ import { ActionButton } from 'src/app/models/game-model';
 })
 export class BoxedSwordComponent implements OnInit {
 
-  @Input() action: ActionButton;
+  @Input() color: string;
 
   constructor() { }
 

@@ -25,13 +25,14 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   sequence: string[];
   step: number;
   level: number;
+  lastPicked: string;
 
   ngOnInit(): void {
     this.buttons = [
-      {name: 'swingA', x: 0, y: 0, scale: 0.5, color: '#ffff00'},
-      {name: 'swingB', x: 50, y: 0, scale: 0.5, color: '#00ff00'},
-      {name: 'swingC', x: 0, y: 50, scale: 0.5, color: '#00ffff'},
-      {name: 'swingD', x: 50, y: 50, scale: 0.5, color: '#ff00ff'},
+      {name: 'swingA', x: 0, y: 0, scale: 0.5, color: '#ffff00', sound: 'ls-block1'},
+      {name: 'swingB', x: 50, y: 0, scale: 0.5, color: '#00ff00', sound: 'ls-block2'},
+      {name: 'swingC', x: 0, y: 50, scale: 0.5, color: '#00ffff', sound: 'ls-block3'},
+      {name: 'swingD', x: 50, y: 50, scale: 0.5, color: '#ff00ff', sound: 'ls-block4'},
     ];
     this.sequence = [];
     this.level = 0;
@@ -44,7 +45,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   levelUp() {
     this.step = 0;
     this.level++;
-    this.sequence.push(this.games.randomPick(this.buttons).name);
+    this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
+    this.sequence.push(this.lastPicked);
     console.log(this.step, this.sequence);
   }
 
@@ -61,13 +63,14 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   clickAction(button: ActionButton) {
-    this.audio.play('ls-block1');
+    this.audio.play(button.sound);
     if (this.current(button)) {
       this.step ++;
       if (this.step >= this.sequence.length) {
         this.levelUp();
       }
     } else {
+      this.audio.play('grunt1');
       this.step = 0;
       console.log("Nooooooooooooo!");
     }
