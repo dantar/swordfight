@@ -11,7 +11,6 @@ import { AudioPlayService } from 'src/app/services/audio-play.service';
 export class LandingPageComponent implements OnInit {
 
   fight: boolean;
-  button: ActionButton;
 
   constructor(
     private audio: AudioPlayService,
@@ -20,13 +19,6 @@ export class LandingPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.fight = false;
-    this.button = {
-      name: 'new',
-      x: 0,
-      y: 0,
-      color: '#ff0000',
-      scale: 1.0,
-    }
     this.audio.setTheme('theme-01');
   }
 
