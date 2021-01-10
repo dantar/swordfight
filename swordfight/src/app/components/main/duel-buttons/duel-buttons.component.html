@@ -1,6 +1,8 @@
 <svg class="fullsvg" viewBox="0 0 100 100">
-    <g *ngFor="let button of buttons" style="opacity:{{sequence[step] === button.name ? 0.2 : 0}};" [attr.transform]="transform(button)" >
-        <g app-boxed-sword [color]="button.color"></g>
+    <g *ngIf="ready">
+        <g *ngFor="let button of buttons" style="opacity:{{sequence[step] === button.name ? 0.2 : 0}};" [attr.transform]="transform(button)" >
+            <g app-boxed-sword [color]="button.color"></g>
+        </g>
     </g>
     <g [@theenemy]="enemyState" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
     <g [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>

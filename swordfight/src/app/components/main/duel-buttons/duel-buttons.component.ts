@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
 import { GamesCommonService } from 'src/app/services/games-common.service';
@@ -20,7 +20,7 @@ import {
     trigger('thesword', [
       // states
       state('rest', style({
-        transform: 'translate(90px,110px) scale(1) rotate(15deg)',
+        transform: 'translate(90px,80px) scale(1) rotate(15deg)',
         opacity: 1,
         backgroundColor: 'yellow'
       })),
@@ -98,11 +98,13 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   lastPicked: string;
   swordState: string;
   enemyState: string;
+  ticker: any;
 
   constructor(
     private games: GamesCommonService,
     private audio: AudioPlayService,
     private shared: SharedDataService,
+    private changes: ChangeDetectorRef,
   ) { }
 
   ngOnDestroy(): void {
@@ -117,8 +119,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       { name: 'swingD', x: 50, y: 50, scale: 0.5, color: '#ff00ff', sound: 'ls-block4' },
     ];
     this.sequence = [];
-    this.level = 0;
-    this.levelUp();
     this.audio.play('ls-ready');
     this.audio.loop('ls-study');
     this.audio.setTheme('battle1');
@@ -127,7 +127,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   levelUp() {
     this.step = 0;
-    this.level++;
     this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
     this.sequence.push(this.lastPicked);
     this.enemyState = this.sequence[this.step];
@@ -182,7 +181,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       }
     } else {
       this.audio.play('grunt1');
-      this.step = 0;
       this.finishedSequence();
     }
   }
@@ -190,6 +188,12 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.swordState = 'rest';
     this.enemyState = 'rest';
     this.ready = false;
+    this.ticker = setInterval(() => {
+      clearInterval(this.ticker);
+      this.changes.detectChanges();
+      this.ready = true;
+      this.levelUp();
+    }, 2000);
   }
 
 }
