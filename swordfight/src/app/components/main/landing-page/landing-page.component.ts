@@ -22,7 +22,7 @@ export class LandingPageComponent implements OnInit {
     this.audio.setTheme('theme-01');
   }
 
-  clickButton(button: ActionButton) {
+  clickButton() {
     this.route.navigate(['fight']);
   };
 
