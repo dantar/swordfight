@@ -1,6 +1,6 @@
 <svg class="fullsvg" viewBox="0 0 100 100">
-    <g *ngFor="let button of buttons" style="{{style(button)}}" [attr.transform]="transform(button)" (click)="clickAction(button)">
+    <g *ngFor="let button of buttons" style="{{style(button)}}" [attr.transform]="transform(button)" (click)="clickAction(button)" >
         <g app-boxed-sword [color]="button.color"></g>
     </g>
-    <g [@thesword]="swordState" app-broadsword></g>
+    <g [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword></g>
 </svg>

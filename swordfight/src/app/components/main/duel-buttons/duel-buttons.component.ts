@@ -45,15 +45,23 @@ import {
         backgroundColor: 'red'
       })),
       // transitions
-      transition('* => swingA', animate('300ms')),
-      transition('* => swingB', animate('300ms')),
-      transition('* => swingC', animate('300ms')),
-      transition('* => swingD', animate('300ms')),
-      transition('* => rest', animate('500ms')),
+      transition('* => swingA', animate('400ms')),
+      transition('* => swingB', animate('400ms')),
+      transition('* => swingC', animate('400ms')),
+      transition('* => swingD', animate('400ms')),
+      transition('* => rest', animate('400ms')),
     ]),
   ],
 })
 export class DuelButtonsComponent implements OnInit, OnDestroy {
+
+  currentAction: ActionButton;
+  buttons: ActionButton[]
+  sequence: string[];
+  step: number;
+  level: number;
+  lastPicked: string;
+  swordState: string;
 
   constructor(
     private games: GamesCommonService,
@@ -64,13 +72,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.audio.stop('ls-study');
   }
-
-  buttons: ActionButton[]
-  sequence: string[];
-  step: number;
-  level: number;
-  lastPicked: string;
-  swordState: string;
 
   ngOnInit(): void {
     this.buttons = [
@@ -93,7 +94,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.level++;
     this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
     this.sequence.push(this.lastPicked);
-    console.log(this.step, this.sequence);
   }
 
   transform(button: ActionButton): string {
@@ -109,9 +109,25 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   clickAction(button: ActionButton) {
-    this.audio.play(button.sound);
-    this.swordState = this.swordState == button.name ? 'rest' : button.name;
-    if (this.current(button)) {
+    this.audio.play('action');
+    this.currentAction = button;
+    if (this.swordState == this.currentAction.name) {
+      this.swordState = 'rest';
+    } else {
+      this.swordState = this.currentAction.name;
+    }
+  }
+
+  swordDone(event: any) {
+    if (this.currentAction && this.currentAction.name == event.toState) {
+      this.checkAction();
+      this.swordState = 'rest';
+    }
+  }
+
+  checkAction() {
+    this.audio.play(this.currentAction.sound);
+    if (this.current(this.currentAction)) {
       this.step++;
       if (this.step >= this.sequence.length) {
         this.levelUp();
@@ -119,7 +135,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     } else {
       this.audio.play('grunt1');
       this.step = 0;
-      console.log("Nooooooooooooo!");
     }
   }
 
