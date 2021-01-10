@@ -51,6 +51,40 @@ import {
       transition('* => swingD', animate('400ms')),
       transition('* => rest', animate('400ms')),
     ]),
+    trigger('theenemy', [
+      // states
+      state('rest', style({
+        transform: 'translate(50px,20px) scale(0.5) rotate(-15deg)',
+        opacity: 1,
+        backgroundColor: 'yellow'
+      })),
+      state('swingA', style({
+        transform: 'translate(25px,25px) scale(0.5) rotate(-60deg)',
+        opacity: 0.3,
+        backgroundColor: 'red'
+      })),
+      state('swingB', style({
+        transform: 'translate(75px,25px) scale(0.5) rotate(60deg)',
+        opacity: 0.8,
+        backgroundColor: 'red'
+      })),
+      state('swingC', style({
+        transform: 'translate(25px,75px) scale(0.5) rotate(210deg)',
+        opacity: 0.8,
+        backgroundColor: 'red'
+      })),
+      state('swingD', style({
+        transform: 'translate(75px,75px) scale(0.5) rotate(120deg)',
+        opacity: 0.8,
+        backgroundColor: 'red'
+      })),
+      // transitions
+      transition('* => swingA', animate('1000ms')),
+      transition('* => swingB', animate('1000ms')),
+      transition('* => swingC', animate('1000ms')),
+      transition('* => swingD', animate('1000ms')),
+      transition('* => rest', animate('3000ms')),
+    ]),
   ],
 })
 export class DuelButtonsComponent implements OnInit, OnDestroy {
@@ -62,6 +96,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   level: number;
   lastPicked: string;
   swordState: string;
+  enemyState: string;
 
   constructor(
     private games: GamesCommonService,
@@ -87,6 +122,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.loop('ls-study');
     this.audio.setTheme('battle1');
     this.swordState = 'rest';
+    this.enemyState = 'rest';
   }
 
   levelUp() {
@@ -101,7 +137,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   style(button: ActionButton): string {
-    return `opacity:${this.current(button) ? 1 : 0.5};`;
+    return `opacity:${this.current(button) ? 0.1 : 0};`;
   }
 
   current(button: ActionButton): boolean {
@@ -125,6 +161,10 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     }
   }
 
+  enemyDone(event: any) {
+    console.log(event, this.swordState, this.enemyState);
+  }
+
   checkAction() {
     this.audio.play(this.currentAction.sound);
     if (this.current(this.currentAction)) {
@@ -132,6 +172,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       if (this.step >= this.sequence.length) {
         this.levelUp();
       }
+      this.enemyState = this.sequence[this.step];
     } else {
       this.audio.play('grunt1');
       this.step = 0;
