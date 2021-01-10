@@ -9,6 +9,8 @@ import { BoxedSwordComponent } from './components/button/boxed-sword/boxed-sword
 import { DuelButtonsComponent } from './components/main/duel-buttons/duel-buttons.component';
 import { LandingPageComponent } from './components/main/landing-page/landing-page.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BroadswordComponent } from './components/swords/broadsword/broadsword.component';
 
 @NgModule({
   declarations: [
@@ -17,11 +19,13 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     FullscreenToggleComponent,
     BoxedSwordComponent,
     DuelButtonsComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    BroadswordComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},

@@ -2,4 +2,5 @@
     <g *ngFor="let button of buttons" style="{{style(button)}}" [attr.transform]="transform(button)" (click)="clickAction(button)">
         <g app-boxed-sword [color]="button.color"></g>
     </g>
+    <g [@thesword]="swordState" app-broadsword></g>
 </svg>
