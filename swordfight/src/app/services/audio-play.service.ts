@@ -22,6 +22,7 @@ export class AudioPlayService {
     this.register('grunt1', 'assets/lightsabre/grunt1.ogg');
     this.register('miss1', 'assets/lightsabre/miss1.ogg');
     this.register('miss2', 'assets/lightsabre/miss2.ogg');
+    this.register('sheat', 'assets/lightsabre/sheat.ogg');
   }
 
   register(name: string, src: string) {

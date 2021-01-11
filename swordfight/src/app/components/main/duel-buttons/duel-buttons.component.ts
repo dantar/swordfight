@@ -171,7 +171,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   enemyStateWithParameters() {
-    return {value: this.enemyState, params: {delay: 400 + 1000 *  5 / (5 + this.enemyLevel)}}
+    return {value: this.enemyState, params: {delay: 300 + 1000 *  3 / (1 + this.enemyLevel)}}
   }
 
   enemyDone(event: any) {
@@ -211,7 +211,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
         this.scoreStartCountDown(200);
       }
     } else {
-      this.audio.play('miss1');
+      this.audio.play(`miss${this.games.randomInt(1,2)}`);
     }
   }
 
@@ -241,6 +241,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   winMatch() {
     this.audio.stop('ls-study');
+    this.audio.play('sheat');
     this.scoreStopCountDown();
     this.ready = false;
     this.enemyState = 'dead';
@@ -249,6 +250,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   loseMatch() {
     this.audio.stop('ls-study');
+    this.audio.play('sheat');
     this.scoreStopCountDown();
     this.ready = false;
     this.enemyState = 'won';
