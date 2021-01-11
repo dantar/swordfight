@@ -78,7 +78,9 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   lastPicked: string;
   swordState: string;
   enemyState: string;
-  ticker: any;
+  restTicker: any;
+  scoreTicker: any;
+  score: number;
 
   constructor(
     private games: GamesCommonService,
@@ -101,6 +103,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.loop('ls-study');
     this.audio.setTheme('battle1');
     this.finishedSequence(true);
+    this.score = 10;
   }
 
   levelUp() {
@@ -150,36 +153,59 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   enemyDone(event: any) {
-    console.log(event, this.swordState, this.enemyState);
+    if (event.toState != 'rest' && event.toState === this.enemyState) {
+      this.score = this.score -5;
+      this.audio.play('grunt1');
+      this.scoreStartCountDown(50);
+    }
   }
 
   checkAction() {
-    this.audio.play(this.currentAction.sound);
     if (this.current(this.currentAction)) {
+      this.score = this.score + 10;
+      this.scoreStopCountDown();
+      this.audio.play(this.currentAction.sound);
       this.step++;
       if (this.step >= this.sequence.length) {
         this.finishedSequence(true)
       } else {
         this.enemyState = this.sequence[this.step];
+        this.scoreStartCountDown(200);
       }
     } else {
-      this.audio.play('grunt1');
-      this.finishedSequence(false);
+      this.audio.play('miss1');
     }
   }
+
+  scoreStartCountDown(update: number) {
+    this.scoreStopCountDown();
+    this.scoreTicker = setInterval(() => {
+      this.score --;
+    }, update);
+  }
+
+  scoreStopCountDown() {
+    if (this.scoreTicker) {
+      clearInterval(this.scoreTicker);
+      this.scoreTicker = null;
+    }
+  }
+
   finishedSequence(won: boolean) {
     this.swordState = 'rest';
     this.enemyState = 'rest';
     this.ready = false;
-    this.ticker = setInterval(() => {
-      clearInterval(this.ticker);
+    this.restTicker = setInterval(() => {
+      clearInterval(this.restTicker);
       this.ready = true;
+      this.scoreStartCountDown(200);
       if (won) {
         this.levelUp()
       } else {
         this.sameLevel();
       };
     }, 2000);
+    this.scoreStopCountDown();
   }
 
 }
