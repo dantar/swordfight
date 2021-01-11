@@ -66,10 +66,10 @@ import {
         transform: 'translate(75px,75px) scale(0.5) rotate(210deg)',
       })),
       // transitions
-      transition('* => swingA', animate('800ms')),
-      transition('* => swingB', animate('800ms')),
-      transition('* => swingC', animate('800ms')),
-      transition('* => swingD', animate('800ms')),
+      transition('* => swingA', animate('{{delay}}ms')),
+      transition('* => swingB', animate('{{delay}}ms')),
+      transition('* => swingC', animate('{{delay}}ms')),
+      transition('* => swingD', animate('{{delay}}ms')),
       transition('* => rest', animate('800ms')),
       transition('* => won', animate('1000ms')),
     ]),
@@ -90,6 +90,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   scoreTicker: any;
   score: number;
 
+  enemyLevel: number;
+
   constructor(
     private games: GamesCommonService,
     private audio: AudioPlayService,
@@ -107,10 +109,11 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       { name: 'swingD', x: 50, y: 50, scale: 0.5, color: '#ff00ff', sound: 'ls-block4' },
     ];
     this.audio.setTheme('battle1');
-    this.newGame();
+    this.enemyLevel = 5;
+    this.newGame(0);
   }
 
-  newGame(): void {
+  newGame(delta: number): void {
     this.sequence = [];
     this.audio.play('ls-ready');
     this.audio.loop('ls-study');
@@ -118,7 +121,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.score = 20;
     this.swordState = 'rest';
     this.enemyState = 'rest';
-
+    this.enemyLevel = Math.max(0, this.enemyLevel + delta);
   }
 
   levelUp() {
@@ -165,6 +168,10 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.checkAction();
       this.swordState = 'rest';
     }
+  }
+
+  enemyStateWithParameters() {
+    return {value: this.enemyState, params: {delay: 400 + 1000 *  5 / (5 + this.enemyLevel)}}
   }
 
   enemyDone(event: any) {

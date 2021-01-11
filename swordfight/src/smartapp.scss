@@ -45,7 +45,6 @@
     }
 }
 
-
 .fullsvg {
     position:fixed; 
     top:0; 
@@ -63,8 +62,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     div {
-        position: fixed;
         text-align: center;
     }
 }

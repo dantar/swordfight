@@ -1,5 +1,8 @@
 <div class="panel-menu-list top-left-menu">
   <div class="panel-menu-item">
+    <span style="font-size: 1.5em; color: yellow;">{{enemyLevel}}</span>
+  </div>
+  <div class="panel-menu-item">
     <span style="font-size: 1.5em; color: white;">{{score}}</span>
   </div>
 </div>
@@ -10,7 +13,7 @@
             <g app-boxed-sword [color]="button.color"></g>
         </g>
     </g>
-    <g *ngIf="enemyState!='dead'" [@theenemy]="enemyState" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
+    <g *ngIf="enemyState!='dead'" [@theenemy]="enemyStateWithParameters()" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
     <g *ngIf="swordState!='dead'"[@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>
     <g *ngIf="ready && swordState!='dead'">
         <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)" (click)="clickAction(button)" >
@@ -20,6 +23,10 @@
 </svg>
 <div class="fullpage" style="font-size: 2em; color: white;" *ngIf="swordState === 'dead' || enemyState === 'dead'">
     <div class="spotlight">
-        <div class="button" (click)="newGame()">Prova ancora!</div>
+        <div class="button" (click)="newGame(2)">+2</div>
+        <div class="button" (click)="newGame(1)">+1</div>
+        <div class="button" (click)="newGame(0)">+0</div>
+        <div class="button" (click)="newGame(-1)">-1</div>
+        <div class="button" (click)="newGame(-2)">-2</div>
     </div>
 </div>
