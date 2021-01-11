@@ -5,14 +5,16 @@
 </div>
 
 <svg class="fullsvg" viewBox="0 0 100 100">
-    <g *ngIf="ready">
+    <g *ngIf="ready && swordState!='dead'">
         <g *ngFor="let button of buttons" style="opacity:{{sequence[step] === button.name ? 0.2 : 0}};" [attr.transform]="transform(button)" >
             <g app-boxed-sword [color]="button.color"></g>
         </g>
     </g>
-    <g [@theenemy]="enemyState" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
-    <g [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>
-    <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)" (click)="clickAction(button)" >
-        <g app-boxed-sword [color]="button.color"></g>
+    <g *ngIf="enemyState!='dead'" [@theenemy]="enemyState" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
+    <g *ngIf="swordState!='dead'"[@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>
+    <g *ngIf="ready && swordState!='dead'">
+        <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)" (click)="clickAction(button)" >
+            <g app-boxed-sword [color]="button.color"></g>
+        </g>
     </g>
 </svg>

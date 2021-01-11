@@ -102,8 +102,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.play('ls-ready');
     this.audio.loop('ls-study');
     this.audio.setTheme('battle1');
-    this.finishedSequence(true);
-    this.score = 10;
+    this.finishedSequence();
+    this.score = 20;
   }
 
   levelUp() {
@@ -153,10 +153,22 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   enemyDone(event: any) {
+    if (event.toState === 'rest' && this.enemyState === 'rest' && this.swordState != 'dead') {
+      this.restTicker = setInterval(() => {
+        clearInterval(this.restTicker);
+        this.ready = true;
+        this.scoreStartCountDown(200);
+        this.levelUp()
+      }, 1000);
+    }
     if (event.toState != 'rest' && event.toState === this.enemyState) {
-      this.score = this.score -5;
       this.audio.play('grunt1');
-      this.scoreStartCountDown(50);
+      this.score = this.score -5;
+      if (this.score < 0) {
+        this.loseMatch();
+      } else {
+        this.scoreStartCountDown(50);
+      }
     }
   }
 
@@ -167,7 +179,11 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.audio.play(this.currentAction.sound);
       this.step++;
       if (this.step >= this.sequence.length) {
-        this.finishedSequence(true)
+        if (this.score > 100) {        
+          this.winMatch();
+        } else {
+          this.finishedSequence()
+        }
       } else {
         this.enemyState = this.sequence[this.step];
         this.scoreStartCountDown(200);
@@ -181,6 +197,9 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.scoreStopCountDown();
     this.scoreTicker = setInterval(() => {
       this.score --;
+      if (this.score < 0) {
+        this.loseMatch();
+      }
     }, update);
   }
 
@@ -191,21 +210,24 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     }
   }
 
-  finishedSequence(won: boolean) {
+  finishedSequence() {
     this.swordState = 'rest';
     this.enemyState = 'rest';
     this.ready = false;
-    this.restTicker = setInterval(() => {
-      clearInterval(this.restTicker);
-      this.ready = true;
-      this.scoreStartCountDown(200);
-      if (won) {
-        this.levelUp()
-      } else {
-        this.sameLevel();
-      };
-    }, 2000);
     this.scoreStopCountDown();
+  }
+
+  winMatch() {
+    this.scoreStopCountDown();
+    this.ready = false;
+    this.enemyState = 'dead';
+  }
+
+  loseMatch() {
+    this.scoreStopCountDown();
+    this.ready = false;
+    this.enemyState = 'rest';
+    this.swordState = 'dead';
   }
 
 }
