@@ -19,6 +19,9 @@ import {
   animations: [
     trigger('thesword', [
       // states
+      state('won', style({
+        transform: 'translate(50px,50px) scale(1) rotate(-5deg)',
+      })),
       state('rest', style({
         transform: 'translate(90px,80px) scale(1) rotate(15deg)',
       })),
@@ -40,9 +43,13 @@ import {
       transition('* => swingC', animate('250ms')),
       transition('* => swingD', animate('250ms')),
       transition('* => rest', animate('1000ms')),
+      transition('* => won', animate('1000ms')),
     ]),
     trigger('theenemy', [
       // states
+      state('won', style({
+        transform: 'translate(50px,50px) scale(1) rotate(-5deg)',
+      })),
       state('rest', style({
         transform: 'translate(50px,20px) scale(0.3) rotate(-15deg)',
       })),
@@ -64,6 +71,7 @@ import {
       transition('* => swingC', animate('800ms')),
       transition('* => swingD', animate('800ms')),
       transition('* => rest', animate('800ms')),
+      transition('* => won', animate('1000ms')),
     ]),
   ],
 })
@@ -98,12 +106,19 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       { name: 'swingC', x: 0, y: 50, scale: 0.5, color: '#00ffff', sound: 'ls-block3' },
       { name: 'swingD', x: 50, y: 50, scale: 0.5, color: '#ff00ff', sound: 'ls-block4' },
     ];
+    this.audio.setTheme('battle1');
+    this.newGame();
+  }
+
+  newGame(): void {
     this.sequence = [];
     this.audio.play('ls-ready');
     this.audio.loop('ls-study');
-    this.audio.setTheme('battle1');
     this.finishedSequence();
     this.score = 20;
+    this.swordState = 'rest';
+    this.enemyState = 'rest';
+
   }
 
   levelUp() {
@@ -161,7 +176,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
         this.levelUp()
       }, 1000);
     }
-    if (event.toState != 'rest' && event.toState === this.enemyState) {
+    if (event.toState === this.enemyState && this.enemyState.startsWith('swing')) {
       this.audio.play('grunt1');
       this.score = this.score -5;
       if (this.score < 0) {
@@ -218,15 +233,18 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   winMatch() {
+    this.audio.stop('ls-study');
     this.scoreStopCountDown();
     this.ready = false;
     this.enemyState = 'dead';
+    this.swordState = 'won';
   }
 
   loseMatch() {
+    this.audio.stop('ls-study');
     this.scoreStopCountDown();
     this.ready = false;
-    this.enemyState = 'rest';
+    this.enemyState = 'won';
     this.swordState = 'dead';
   }
 

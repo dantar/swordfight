@@ -18,3 +18,8 @@
         </g>
     </g>
 </svg>
+<div class="fullpage" style="font-size: 2em; color: white;" *ngIf="swordState === 'dead' || enemyState === 'dead'">
+    <div class="spotlight">
+        <div class="button" (click)="newGame()">Prova ancora!</div>
+    </div>
+</div>
