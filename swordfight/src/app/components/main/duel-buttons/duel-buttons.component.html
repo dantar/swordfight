@@ -3,7 +3,7 @@
     <span style="font-size: 1.5em; color: yellow;">{{enemyLevel}}</span>
   </div>
   <div class="panel-menu-item">
-    <span style="font-size: 1.5em; color: white;">{{score}}</span>
+    <span style="font-size: 1.5em; color: white;" *ngIf="score >= 0">{{score}}</span>
   </div>
 </div>
 
@@ -13,11 +13,14 @@
             <g app-boxed-sword [color]="button.color"></g>
         </g>
     </g>
-    <g *ngIf="enemyState!='dead'" [@theenemy]="enemyStateWithParameters()" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
-    <g *ngIf="swordState!='dead'"[@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>
+    <g [@theenemy]="enemyStateWithParameters()" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
+    <g *ngIf="swordState!='dead'" [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>
     <g *ngIf="ready && swordState!='dead'">
         <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)" (click)="clickAction(button)" >
             <g app-boxed-sword [color]="button.color"></g>
+        </g>
+        <g (click)="clickWin()" transform="translate(50 50) scale(0.2)" *ngIf="score > 100">
+            <circle x="0" y="0" r="50" style="fill:teal"></circle>
         </g>
     </g>
 </svg>

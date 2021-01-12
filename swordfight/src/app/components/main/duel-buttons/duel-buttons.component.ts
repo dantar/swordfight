@@ -19,8 +19,11 @@ import {
   animations: [
     trigger('thesword', [
       // states
+      state('mighty', style({
+        transform: 'translate(50px,50px) scale(0.5) rotate(45deg)',
+      })),
       state('won', style({
-        transform: 'translate(50px,50px) scale(1) rotate(-5deg)',
+        transform: 'translate(50px,50px) scale(1) rotate(20deg)',
       })),
       state('rest', style({
         transform: 'translate(90px,80px) scale(1) rotate(15deg)',
@@ -44,11 +47,12 @@ import {
       transition('* => swingD', animate('250ms')),
       transition('* => rest', animate('1000ms')),
       transition('* => won', animate('1000ms')),
+      transition('* => mighty', animate('150ms')),
     ]),
     trigger('theenemy', [
       // states
       state('won', style({
-        transform: 'translate(50px,50px) scale(1) rotate(-5deg)',
+        transform: 'translate(50px,50px) scale(1) rotate(20deg)',
       })),
       state('rest', style({
         transform: 'translate(50px,20px) scale(0.3) rotate(-15deg)',
@@ -65,6 +69,9 @@ import {
       state('swingD', style({
         transform: 'translate(75px,75px) scale(0.5) rotate(210deg)',
       })),
+      state('dead', style({
+        transform: 'translate(-100px,-100px) scale(0.2) rotate(45deg)',
+      })),
       // transitions
       transition('* => swingA', animate('{{delay}}ms')),
       transition('* => swingB', animate('{{delay}}ms')),
@@ -72,6 +79,7 @@ import {
       transition('* => swingD', animate('{{delay}}ms')),
       transition('* => rest', animate('800ms')),
       transition('* => won', animate('1000ms')),
+      transition('* => dead', animate('400ms')),
     ]),
   ],
 })
@@ -164,6 +172,16 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   swordDone(event: any) {
+    console.log(event);
+    if (event.toState === 'mighty') {
+      if (this.score > 100) {
+        this.audio.play('ls-block1');
+        this.winMatch();
+      } else {
+        // play taunt "ah ah not yet jedi!"
+        this.swordState = 'rest';
+      }
+    }
     if (this.currentAction && this.currentAction.name == event.toState) {
       this.checkAction();
       this.swordState = 'rest';
@@ -175,6 +193,9 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   enemyDone(event: any) {
+    if (event.toState === 'dead' && this.enemyState === 'dead') {
+      // enemy is dead dead
+    }
     if (event.toState === 'rest' && this.enemyState === 'rest' && this.swordState != 'dead') {
       this.restTicker = setInterval(() => {
         clearInterval(this.restTicker);
@@ -201,7 +222,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.audio.play(this.currentAction.sound);
       this.step++;
       if (this.step >= this.sequence.length) {
-        if (this.score > 100) {        
+        if (this.score > 200) {        
           this.winMatch();
         } else {
           this.finishedSequence()
@@ -211,6 +232,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
         this.scoreStartCountDown(200);
       }
     } else {
+      this.score = Math.ceil(this.score / 2);
       this.audio.play(`miss${this.games.randomInt(1,2)}`);
     }
   }
@@ -255,6 +277,10 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.ready = false;
     this.enemyState = 'won';
     this.swordState = 'dead';
+  }
+
+  clickWin() {
+    this.swordState = 'mighty';
   }
 
 }

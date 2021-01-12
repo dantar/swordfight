@@ -49,7 +49,9 @@ export class AudioPlayService {
 
   stop(name: string) {
     let audio = this.audios[name];
-    audio.pause();
+    if (audio) {
+      audio.pause();
+    }
   }
 
   setTheme(name: string) {
