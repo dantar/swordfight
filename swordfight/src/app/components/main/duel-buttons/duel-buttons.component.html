@@ -19,8 +19,8 @@
         <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)" (click)="clickAction(button)" >
             <g app-boxed-sword [color]="button.color"></g>
         </g>
-        <g (click)="clickWin()" transform="translate(50 50) scale(0.2)" *ngIf="score > 100">
-            <circle x="0" y="0" r="50" style="fill:teal"></circle>
+        <g (click)="clickWin()" [attr.transform]="scaleFatal()">
+            <g app-strike-fatal></g>
         </g>
     </g>
 </svg>

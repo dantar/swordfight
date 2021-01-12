@@ -41,13 +41,13 @@ import {
         transform: 'translate(75px,75px) scale(0.5) rotate(120deg)',
       })),
       // transitions
-      transition('* => swingA', animate('250ms')),
-      transition('* => swingB', animate('250ms')),
-      transition('* => swingC', animate('250ms')),
-      transition('* => swingD', animate('250ms')),
+      transition('* => swingA', animate('200ms')),
+      transition('* => swingB', animate('200ms')),
+      transition('* => swingC', animate('200ms')),
+      transition('* => swingD', animate('200ms')),
       transition('* => rest', animate('1000ms')),
       transition('* => won', animate('1000ms')),
-      transition('* => mighty', animate('150ms')),
+      transition('* => mighty', animate('100ms')),
     ]),
     trigger('theenemy', [
       // states
@@ -281,6 +281,10 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   clickWin() {
     this.swordState = 'mighty';
+  }
+
+  scaleFatal() {
+    return `translate(50 50) scale(${this.score < 100 ? 0 : Math.min(1, this.score / 50 - 2)}) translate(-50 -50)`;
   }
 
 }

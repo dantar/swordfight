@@ -11,6 +11,7 @@ import { LandingPageComponent } from './components/main/landing-page/landing-pag
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BroadswordComponent } from './components/swords/broadsword/broadsword.component';
+import { StrikeFatalComponent } from './components/parts/strike-fatal/strike-fatal.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { BroadswordComponent } from './components/swords/broadsword/broadsword.c
     DuelButtonsComponent,
     LandingPageComponent,
     BroadswordComponent,
+    StrikeFatalComponent,
   ],
   imports: [
     BrowserModule,
