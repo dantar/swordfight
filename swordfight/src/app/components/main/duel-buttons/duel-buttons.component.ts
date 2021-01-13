@@ -11,6 +11,7 @@ import {
   transition,
   // ...
 } from '@angular/animations';
+import { TickersService } from 'src/app/services/tickers.service';
 
 @Component({
   selector: 'app-duel-buttons',
@@ -94,15 +95,15 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   lastPicked: string;
   swordState: string;
   enemyState: string;
-  restTicker: any;
-  scoreTicker: any;
   score: number;
+  hits: number;
 
   enemyLevel: number;
 
   constructor(
     private games: GamesCommonService,
     private audio: AudioPlayService,
+    private tickers: TickersService,
   ) { }
 
   ngOnDestroy(): void {
@@ -126,7 +127,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.play('ls-ready');
     this.audio.loop('ls-study');
     this.finishedSequence();
-    this.score = 20;
+    this.hits = 20;
+    this.score = 0;
     this.swordState = 'rest';
     this.enemyState = 'rest';
     this.enemyLevel = Math.max(0, this.enemyLevel + delta);
@@ -197,14 +199,12 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       // enemy is dead dead
     }
     if (event.toState === 'rest' && this.enemyState === 'rest' && this.swordState != 'dead') {
-      this.restTicker = setInterval(() => {
-        clearInterval(this.restTicker);
+      this.tickers.once('rest', 800, () => {
         this.ready = true;
-        this.scoreStartCountDown(200);
-        this.levelUp()
-      }, 1000);
+        this.levelUp();
+      });
     }
-    if (event.toState === this.enemyState && this.enemyState.startsWith('swing')) {
+    if (event.toState === this.enemyState && this.enemyState.startsWith('swing') && this.enemyState != this.swordState) {
       this.audio.play('grunt1');
       this.score = this.score -5;
       if (this.score < 0) {
@@ -217,8 +217,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   checkAction() {
     if (this.current(this.currentAction)) {
+      this.tickers.stop('hits');
       this.score = this.score + 10;
-      this.scoreStopCountDown();
       this.audio.play(this.currentAction.sound);
       this.step++;
       if (this.step >= this.sequence.length) {
@@ -229,7 +229,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
         }
       } else {
         this.enemyState = this.sequence[this.step];
-        this.scoreStartCountDown(200);
+        //this.scoreStartCountDown(200);
       }
     } else {
       this.score = Math.ceil(this.score / 2);
@@ -238,33 +238,27 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   scoreStartCountDown(update: number) {
-    this.scoreStopCountDown();
-    this.scoreTicker = setInterval(() => {
-      this.score --;
-      if (this.score < 0) {
+    this.tickers.loop('hits', update, () => {
+      this.hits --;
+      if (this.hits < 0) {
         this.loseMatch();
       }
-    }, update);
-  }
-
-  scoreStopCountDown() {
-    if (this.scoreTicker) {
-      clearInterval(this.scoreTicker);
-      this.scoreTicker = null;
-    }
+    });
   }
 
   finishedSequence() {
     this.swordState = 'rest';
     this.enemyState = 'rest';
     this.ready = false;
-    this.scoreStopCountDown();
+    this.tickers.stop('rest');
+    this.tickers.stop('hits');
   }
 
   winMatch() {
     this.audio.stop('ls-study');
     this.audio.play('sheat');
-    this.scoreStopCountDown();
+    this.tickers.stop('rest');
+    this.tickers.stop('hits');
     this.ready = false;
     this.enemyState = 'dead';
     this.swordState = 'won';
@@ -273,7 +267,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   loseMatch() {
     this.audio.stop('ls-study');
     this.audio.play('sheat');
-    this.scoreStopCountDown();
+    this.tickers.stop('rest');
+    this.tickers.stop('hits');
     this.ready = false;
     this.enemyState = 'won';
     this.swordState = 'dead';
@@ -284,7 +279,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   scaleFatal() {
-    return `translate(50 50) scale(${this.score < 100 ? 0 : Math.min(1, this.score / 50 - 2)}) translate(-50 -50)`;
+    return `translate(50 50) scale(${this.score < 100 ? 0 : Math.min(0.5, this.score / 50 - 2)}) translate(-50 -50)`;
   }
 
 }

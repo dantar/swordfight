@@ -5,6 +5,9 @@
   <div class="panel-menu-item">
     <span style="font-size: 1.5em; color: white;" *ngIf="score >= 0">{{score}}</span>
   </div>
+  <div class="panel-menu-item">
+    <span style="font-size: 1.5em; color: red;" *ngIf="score >= 0">{{hits}}</span>
+  </div>
 </div>
 
 <svg class="fullsvg" viewBox="0 0 100 100">
@@ -13,6 +16,7 @@
             <g app-boxed-sword [color]="button.color"></g>
         </g>
     </g>
+    <!-- <g app-enemy-orc [enemyState]="enemyState" (enemyHits)="enemyHits($event)" ></g> -->
     <g [@theenemy]="enemyStateWithParameters()" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
     <g *ngIf="swordState!='dead'" [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>
     <g *ngIf="ready && swordState!='dead'">

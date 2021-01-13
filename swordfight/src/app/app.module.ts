@@ -12,6 +12,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BroadswordComponent } from './components/swords/broadsword/broadsword.component';
 import { StrikeFatalComponent } from './components/parts/strike-fatal/strike-fatal.component';
+import { EnemyOrcComponent } from './components/enemies/enemy-orc/enemy-orc.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { StrikeFatalComponent } from './components/parts/strike-fatal/strike-fat
     LandingPageComponent,
     BroadswordComponent,
     StrikeFatalComponent,
+    EnemyOrcComponent,
   ],
   imports: [
     BrowserModule,
