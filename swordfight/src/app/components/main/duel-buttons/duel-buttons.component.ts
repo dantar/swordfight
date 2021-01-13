@@ -95,6 +95,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   lastPicked: string;
   swordState: string;
   enemyState: string;
+  totalScore: number;
   score: number;
   hits: number;
 
@@ -128,10 +129,11 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.loop('ls-study');
     this.finishedSequence();
     this.hits = 20;
-    this.score = 0;
+    this.totalScore = 0;
+    this.score = 10;
+    this.enemyLevel = Math.max(0, this.enemyLevel + delta);
     this.swordState = 'rest';
     this.enemyState = 'rest';
-    this.enemyLevel = Math.max(0, this.enemyLevel + delta);
   }
 
   levelUp() {
@@ -176,7 +178,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   swordDone(event: any) {
     console.log(event);
     if (event.toState === 'mighty') {
-      if (this.score > 100) {
+      if (this.totalScore > 30) {
         this.audio.play('ls-block1');
         this.winMatch();
       } else {
@@ -191,7 +193,10 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   enemyStateWithParameters() {
-    return {value: this.enemyState, params: {delay: 300 + 1000 *  3 / (1 + this.enemyLevel)}}
+    return {value: this.enemyState, params: {delay: this.currentDelay()}}
+  }
+  currentDelay(): number {
+    return 300 + 1000 *  3 / (1 + this.enemyLevel);
   }
 
   enemyDone(event: any) {
@@ -202,47 +207,50 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.tickers.once('rest', 800, () => {
         this.ready = true;
         this.levelUp();
+        this.scoreStartCountDown();
       });
     }
     if (event.toState === this.enemyState && this.enemyState.startsWith('swing') && this.enemyState != this.swordState) {
       this.audio.play('grunt1');
-      this.score = this.score -5;
-      if (this.score < 0) {
-        this.loseMatch();
-      } else {
-        this.scoreStartCountDown(50);
-      }
+      this.hitsStartCountUp(50);
     }
   }
 
   checkAction() {
     if (this.current(this.currentAction)) {
       this.tickers.stop('hits');
-      this.score = this.score + 10;
+      this.tickers.stop('score');
+      this.totalScore = this.totalScore + this.score;
+      this.score = 10;
       this.audio.play(this.currentAction.sound);
       this.step++;
       if (this.step >= this.sequence.length) {
-        if (this.score > 200) {        
+        if (this.totalScore > 200) {        
           this.winMatch();
         } else {
           this.finishedSequence()
         }
       } else {
         this.enemyState = this.sequence[this.step];
-        //this.scoreStartCountDown(200);
+        this.scoreStartCountDown();
       }
     } else {
-      this.score = Math.ceil(this.score / 2);
       this.audio.play(`miss${this.games.randomInt(1,2)}`);
     }
   }
 
-  scoreStartCountDown(update: number) {
+  hitsStartCountUp(update: number) {
     this.tickers.loop('hits', update, () => {
       this.hits --;
       if (this.hits < 0) {
         this.loseMatch();
       }
+    });
+  }
+
+  scoreStartCountDown() {
+    this.tickers.loop('score', this.currentDelay() / 10, () => {
+      this.score = Math.max(0, this.score - 1);
     });
   }
 
@@ -279,7 +287,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   scaleFatal() {
-    return `translate(50 50) scale(${this.score < 100 ? 0 : Math.min(0.5, this.score / 50 - 2)}) translate(-50 -50)`;
+    return `translate(50 50) scale(${Math.max(0, Math.min(0.5, this.totalScore / 15 - 2))}) translate(-50 -50)`;
   }
 
 }
