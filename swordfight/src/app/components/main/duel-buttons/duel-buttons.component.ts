@@ -1,18 +1,10 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
 import { GamesCommonService } from 'src/app/services/games-common.service';
-import { SharedDataService } from 'src/app/services/shared-data.service';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-  // ...
-} from '@angular/animations';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TickersService } from 'src/app/services/tickers.service';
-import { SwordsItem, SwordsService } from 'src/app/swords.service';
+import { SwordsService } from 'src/app/swords.service';
 
 @Component({
   selector: 'app-duel-buttons',
@@ -22,7 +14,7 @@ import { SwordsItem, SwordsService } from 'src/app/swords.service';
     trigger('thesword', [
       // states
       state('mighty', style({
-        transform: 'translate(50px,50px) scale(0.5) rotate(45deg)',
+        transform: 'translate(50px,50px) scale(0.7) rotate(45deg)',
       })),
       state('won', style({
         transform: 'translate(50px,50px) scale(1) rotate(20deg)',
@@ -31,16 +23,16 @@ import { SwordsItem, SwordsService } from 'src/app/swords.service';
         transform: 'translate(90px,80px) scale(1) rotate(15deg)',
       })),
       state('swingA', style({
-        transform: 'translate(25px,25px) scale(0.5) rotate(-60deg)',
+        transform: 'translate(25px,25px) scale(0.7) rotate(-60deg)',
       })),
       state('swingB', style({
-        transform: 'translate(75px,25px) scale(0.5) rotate(60deg)',
+        transform: 'translate(75px,25px) scale(0.7) rotate(60deg)',
       })),
       state('swingC', style({
-        transform: 'translate(25px,75px) scale(0.5) rotate(210deg)',
+        transform: 'translate(25px,75px) scale(0.7) rotate(210deg)',
       })),
       state('swingD', style({
-        transform: 'translate(75px,75px) scale(0.5) rotate(120deg)',
+        transform: 'translate(75px,75px) scale(0.7) rotate(120deg)',
       })),
       // transitions
       transition('* => swingA', animate('200ms')),
@@ -57,19 +49,19 @@ import { SwordsItem, SwordsService } from 'src/app/swords.service';
         transform: 'translate(50px,50px) scale(1) rotate(20deg)',
       })),
       state('rest', style({
-        transform: 'translate(50px,20px) scale(0.3) rotate(-15deg)',
+        transform: 'translate(15px,25px) scale(0.5) rotate(-20deg)',
       })),
       state('swingA', style({
-        transform: 'translate(25px,25px) scale(0.5) rotate(30deg)',
+        transform: 'translate(25px,25px) scale(0.7) rotate(30deg)',
       })),
       state('swingB', style({
-        transform: 'translate(75px,25px) scale(0.5) rotate(150deg)',
+        transform: 'translate(75px,25px) scale(0.7) rotate(150deg)',
       })),
       state('swingC', style({
-        transform: 'translate(25px,75px) scale(0.5) rotate(300deg)',
+        transform: 'translate(25px,75px) scale(0.7) rotate(300deg)',
       })),
       state('swingD', style({
-        transform: 'translate(75px,75px) scale(0.5) rotate(210deg)',
+        transform: 'translate(75px,75px) scale(0.7) rotate(210deg)',
       })),
       state('dead', style({
         transform: 'translate(-100px,-100px) scale(0.2) rotate(45deg)',
