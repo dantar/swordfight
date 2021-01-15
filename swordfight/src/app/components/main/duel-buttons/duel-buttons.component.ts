@@ -43,38 +43,6 @@ import { SwordsService } from 'src/app/swords.service';
       transition('* => won', animate('1000ms')),
       transition('* => mighty', animate('100ms')),
     ]),
-    trigger('theenemy', [
-      // states
-      state('won', style({
-        transform: 'translate(50px,50px) scale(1) rotate(20deg)',
-      })),
-      state('rest', style({
-        transform: 'translate(15px,25px) scale(0.5) rotate(-20deg)',
-      })),
-      state('swingA', style({
-        transform: 'translate(25px,25px) scale(0.7) rotate(30deg)',
-      })),
-      state('swingB', style({
-        transform: 'translate(75px,25px) scale(0.7) rotate(150deg)',
-      })),
-      state('swingC', style({
-        transform: 'translate(25px,75px) scale(0.7) rotate(300deg)',
-      })),
-      state('swingD', style({
-        transform: 'translate(75px,75px) scale(0.7) rotate(210deg)',
-      })),
-      state('dead', style({
-        transform: 'translate(-100px,-100px) scale(0.2) rotate(45deg)',
-      })),
-      // transitions
-      transition('* => swingA', animate('{{delay}}ms')),
-      transition('* => swingB', animate('{{delay}}ms')),
-      transition('* => swingC', animate('{{delay}}ms')),
-      transition('* => swingD', animate('{{delay}}ms')),
-      transition('* => rest', animate('800ms')),
-      transition('* => won', animate('1000ms')),
-      transition('* => dead', animate('400ms')),
-    ]),
   ],
 })
 export class DuelButtonsComponent implements OnInit, OnDestroy {

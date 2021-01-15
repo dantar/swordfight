@@ -12,8 +12,7 @@
 
 <svg class="fullsvg" viewBox="0 0 100 100">
 
-    <g [@theenemy]="enemyStateWithParameters()" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
-    <g app-enemy-orc [enemyState]="enemyState" [enemyLevel]="enemyLevel"></g>
+    <g app-enemy-orc [enemyState]="enemyState" [enemyLevel]="enemyLevel" (enemyDone)="enemyDone($event)"></g>
 
     <g *ngIf="ready && swordState!='dead'">
         <g *ngFor="let button of buttons" style="opacity:{{sequence[step] === button.name ? 0.3 : 0}};" [attr.transform]="transform(button)" >

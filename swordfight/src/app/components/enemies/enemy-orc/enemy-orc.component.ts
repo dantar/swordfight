@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 let animationParameters = {
@@ -22,7 +22,7 @@ let animationParameters = {
         transform: 'translate(20px,25px) scale({{swordSwingScale}}) rotate(10deg)',
       }), {params: animationParameters}),
       state('swingB', style({
-        transform: 'translate(50px,20px) scale({{swordSwingScale}}) rotate(80deg)',
+        transform: 'translate(75px,20px) scale({{swordSwingScale}}) rotate(80deg)',
       }), {params: animationParameters}),
       state('swingC', style({
         transform: 'translate(25px,60px) scale({{swordSwingScale}}) rotate(160deg)',
@@ -49,6 +49,7 @@ export class EnemyOrcComponent implements OnInit {
 
   @Input() enemyState: string;
   @Input() enemyLevel: number;
+  @Output() enemyDone = new EventEmitter();
 
   swordSwingScale: 1.2;
 
