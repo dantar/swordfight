@@ -16,6 +16,10 @@
             <g app-boxed-sword [color]="button.color"></g>
         </g>
     </g>
+    <g [attr.transform]="scaleFatal()" *ngIf="ready">
+        <g app-strike-fatal></g>
+    </g>
+
     <!-- <g app-enemy-orc [enemyState]="enemyState" (enemyHits)="enemyHits($event)" ></g> -->
     <g [@theenemy]="enemyStateWithParameters()" (@theenemy.done)="enemyDone($event)" app-broadsword color="#ff0000"></g>
     <g *ngIf="swordState!='dead'" [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>
@@ -23,7 +27,7 @@
         <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)" (click)="clickAction(button)" >
             <g app-boxed-sword [color]="button.color"></g>
         </g>
-        <g (click)="clickWin()" [attr.transform]="scaleFatal()">
+        <g (click)="clickWin()" [attr.transform]="scaleFatal()" style="opacity:0;">
             <g app-strike-fatal></g>
         </g>
     </g>

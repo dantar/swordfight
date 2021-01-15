@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
 import { GamesCommonService } from 'src/app/services/games-common.service';
@@ -12,6 +12,7 @@ import {
   // ...
 } from '@angular/animations';
 import { TickersService } from 'src/app/services/tickers.service';
+import { SwordsItem, SwordsService } from 'src/app/swords.service';
 
 @Component({
   selector: 'app-duel-buttons',
@@ -105,18 +106,19 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     private games: GamesCommonService,
     private audio: AudioPlayService,
     private tickers: TickersService,
+    private swords: SwordsService,
   ) { }
 
   ngOnDestroy(): void {
-    this.audio.stop('ls-study');
+    this.audio.stop('bs-study');
   }
 
   ngOnInit(): void {
     this.buttons = [
-      { name: 'swingA', x: 0, y: 0, scale: 0.5, color: '#ffff00', sound: 'ls-block1' },
-      { name: 'swingB', x: 50, y: 0, scale: 0.5, color: '#00ff00', sound: 'ls-block2' },
-      { name: 'swingC', x: 0, y: 50, scale: 0.5, color: '#00ffff', sound: 'ls-block3' },
-      { name: 'swingD', x: 50, y: 50, scale: 0.5, color: '#ff00ff', sound: 'ls-block4' },
+      { name: 'swingA', x: 0, y: 0, scale: 0.5, color: '#ffff00', sound: 'block1' },
+      { name: 'swingB', x: 50, y: 0, scale: 0.5, color: '#00ff00', sound: 'block2' },
+      { name: 'swingC', x: 0, y: 50, scale: 0.5, color: '#00ffff', sound: 'block3' },
+      { name: 'swingD', x: 50, y: 50, scale: 0.5, color: '#ff00ff', sound: 'block4' },
     ];
     this.audio.setTheme('battle1');
     this.enemyLevel = 5;
@@ -125,8 +127,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   newGame(delta: number): void {
     this.sequence = [];
-    this.audio.play('ls-ready');
-    this.audio.loop('ls-study');
+    this.audio.play(this.swords.sound('ready'));
     this.finishedSequence();
     this.hits = 20;
     this.totalScore = 0;
@@ -161,7 +162,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   clickAction(button: ActionButton) {
-    this.audio.play('action');
     if (this.ready) {
       this.currentAction = button;
       if (this.swordState == this.currentAction.name) {
@@ -179,7 +179,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     console.log(event);
     if (event.toState === 'mighty') {
       if (this.totalScore > 30) {
-        this.audio.play('ls-block1');
+        this.audio.play(this.swords.sound('fatal'));
         this.winMatch();
       } else {
         // play taunt "ah ah not yet jedi!"
@@ -222,7 +222,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.tickers.stop('score');
       this.totalScore = this.totalScore + this.score;
       this.score = 10;
-      this.audio.play(this.currentAction.sound);
+      this.audio.play(this.swords.sound(this.currentAction.name));
       this.step++;
       if (this.step >= this.sequence.length) {
         if (this.totalScore > 200) {        
@@ -235,7 +235,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
         this.scoreStartCountDown();
       }
     } else {
-      this.audio.play(`miss${this.games.randomInt(1,2)}`);
+      this.audio.play(this.swords.sound('missed'));
     }
   }
 
@@ -263,8 +263,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   winMatch() {
-    this.audio.stop('ls-study');
-    this.audio.play('sheat');
+    this.audio.stop('bs-study');
+    this.audio.play(this.swords.sound('sheat'));
     this.tickers.stop('rest');
     this.tickers.stop('hits');
     this.ready = false;
@@ -273,8 +273,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   loseMatch() {
-    this.audio.stop('ls-study');
-    this.audio.play('sheat');
+    this.audio.stop('bs-study');
+    this.audio.play(this.swords.sound('sheat'));
     this.tickers.stop('rest');
     this.tickers.stop('hits');
     this.ready = false;

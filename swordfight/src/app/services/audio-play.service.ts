@@ -34,6 +34,10 @@ export class AudioPlayService {
 
   play(name: string) {
     let audio = this.audios[name];
+    if (!audio) {
+      console.log('audio not found', name);
+      audio = this.audios['action'];
+    }
     audio.pause();
     audio.currentTime = 0;
     audio.play();

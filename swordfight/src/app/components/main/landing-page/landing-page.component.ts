@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
+import { SwordsItem, SwordsService } from 'src/app/swords.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -11,6 +12,8 @@ import { AudioPlayService } from 'src/app/services/audio-play.service';
 export class LandingPageComponent implements OnInit {
 
   fight: boolean;
+
+  sword: SwordsItem;
 
   constructor(
     private audio: AudioPlayService,
