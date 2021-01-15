@@ -5,9 +5,7 @@ export class SvgPattern {
 
 export class ActionButton {
     name: string;
-    x: number;
-    y: number;
-    scale: number;
+    rotate: number;
     color: string;
     sound: string;
 }

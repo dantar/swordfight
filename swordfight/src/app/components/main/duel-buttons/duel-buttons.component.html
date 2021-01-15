@@ -12,11 +12,11 @@
 
 <svg class="fullsvg" viewBox="0 0 100 100">
     <g *ngIf="ready && swordState!='dead'">
-        <g *ngFor="let button of buttons" style="opacity:{{sequence[step] === button.name ? 0.2 : 0}};" [attr.transform]="transform(button)" >
+        <g *ngFor="let button of buttons" style="opacity:{{sequence[step] === button.name ? 0.4 : 0}};" [attr.transform]="transform(button)" >
             <g app-boxed-sword [color]="button.color"></g>
         </g>
     </g>
-    <g [attr.transform]="scaleFatal()" *ngIf="ready">
+    <g [attr.transform]="transformFatal()" *ngIf="ready" style="opacity:0.4;">
         <g app-strike-fatal></g>
     </g>
 
@@ -27,7 +27,7 @@
         <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)" (click)="clickAction(button)" >
             <g app-boxed-sword [color]="button.color"></g>
         </g>
-        <g (click)="clickWin()" [attr.transform]="scaleFatal()" style="opacity:0;">
+        <g (click)="clickWin()" [attr.transform]="transformFatal()" style="opacity:0;">
             <g app-strike-fatal></g>
         </g>
     </g>

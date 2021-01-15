@@ -115,10 +115,10 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.buttons = [
-      { name: 'swingA', x: 0, y: 0, scale: 0.5, color: '#ffff00', sound: 'block1' },
-      { name: 'swingB', x: 50, y: 0, scale: 0.5, color: '#00ff00', sound: 'block2' },
-      { name: 'swingC', x: 0, y: 50, scale: 0.5, color: '#00ffff', sound: 'block3' },
-      { name: 'swingD', x: 50, y: 50, scale: 0.5, color: '#ff00ff', sound: 'block4' },
+      { name: 'swingA', rotate: 180, color: '#ffff00', sound: 'block1' },
+      { name: 'swingB', rotate: -90, color: '#00ff00', sound: 'block2' },
+      { name: 'swingC', rotate: 90, color: '#00ffff', sound: 'block3' },
+      { name: 'swingD', rotate: 0, color: '#ff00ff', sound: 'block4' },
     ];
     this.audio.setTheme('battle1');
     this.enemyLevel = 5;
@@ -150,7 +150,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   transform(button: ActionButton): string {
-    return `translate(${button.x} ${button.y}) scale(${button.scale})`;
+    return `translate(50 50) scale(0.5) rotate(${button.rotate})`;
   }
 
   style(button: ActionButton): string {
@@ -178,7 +178,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   swordDone(event: any) {
     console.log(event);
     if (event.toState === 'mighty') {
-      if (this.totalScore > 30) {
+      if (this.scaleFatal() > 0) {
         this.audio.play(this.swords.sound('fatal'));
         this.winMatch();
       } else {
@@ -286,8 +286,12 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.swordState = 'mighty';
   }
 
-  scaleFatal() {
-    return `translate(50 50) scale(${Math.max(0, Math.min(0.5, this.totalScore / 15 - 2))}) translate(-50 -50)`;
+  scaleFatal(): number {
+    return Math.max(0, Math.min(0.4, this.totalScore / 10 - 2));
+  }
+
+  transformFatal() {
+    return `translate(50 50) scale(${this.scaleFatal()}) translate(-50 -50)`;
   }
 
 }
