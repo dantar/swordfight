@@ -2,7 +2,7 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 let animationParameters = {
-  swordSwingScale: 1.2,
+  swordSwingScale: 0.4,
 }
 
 @Component({
@@ -16,19 +16,19 @@ let animationParameters = {
         transform: 'translate(30px,5px) scale(1) rotate(80deg)',
       }), {params: animationParameters}),
       state('rest', style({
-        transform: 'translate(15px,20px) scale(1) rotate(-20deg)',
+        transform: 'translate(45px,50px) scale(1) rotate(70deg)',
       }), {params: animationParameters}),
       state('swingA', style({
-        transform: 'translate(20px,25px) scale({{swordSwingScale}}) rotate(10deg)',
+        transform: 'translate(20px,25px) scale(1.8) rotate(10deg)',
       }), {params: animationParameters}),
       state('swingB', style({
-        transform: 'translate(75px,20px) scale({{swordSwingScale}}) rotate(80deg)',
+        transform: 'translate(70px,30px) scale(1.8) rotate(30deg)',
       }), {params: animationParameters}),
       state('swingC', style({
-        transform: 'translate(25px,60px) scale({{swordSwingScale}}) rotate(160deg)',
+        transform: 'translate(25px,60px) scale(1.8) rotate(190deg)',
       }), {params: animationParameters}),
       state('swingD', style({
-        transform: 'translate(75px,75px) scale({{swordSwingScale}}) rotate(120deg)',
+        transform: 'translate(70px,75px) scale(1.8) rotate(120deg)',
       }), {params: animationParameters}),
       state('dead', style({
         transform: 'translate(15px,25px) scale(1) rotate(-20deg)',

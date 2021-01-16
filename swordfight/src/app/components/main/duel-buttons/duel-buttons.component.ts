@@ -15,25 +15,25 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
     trigger('thesword', [
       // states
       state('mighty', style({
-        transform: 'translate(50px,50px) scale(0.7) rotate(45deg)',
+        transform: 'translate(50px,50px) scale(1.1) rotate(45deg)',
       })),
       state('won', style({
-        transform: 'translate(50px,50px) scale(1) rotate(20deg)',
+        transform: 'translate(50px,50px) scale(1.3) rotate(20deg)',
       })),
       state('rest', style({
-        transform: 'translate(90px,80px) scale(1) rotate(15deg)',
+        transform: 'translate(95px,80px) scale(1.5) rotate(20deg)',
       })),
       state('swingA', style({
-        transform: 'translate(25px,25px) scale(0.7) rotate(-60deg)',
+        transform: 'translate(25px,20px) scale(1.1) rotate(-45deg)',
       })),
       state('swingB', style({
-        transform: 'translate(75px,25px) scale(0.7) rotate(60deg)',
+        transform: 'translate(75px,25px) scale(1.1) rotate(-20deg)',
       })),
       state('swingC', style({
-        transform: 'translate(25px,75px) scale(0.7) rotate(210deg)',
+        transform: 'translate(25px,75px) scale(1.1) rotate(-90deg)',
       })),
       state('swingD', style({
-        transform: 'translate(75px,75px) scale(0.7) rotate(120deg)',
+        transform: 'translate(75px,75px) scale(1.1) rotate(-15deg)',
       })),
       // transitions
       transition('* => swingA', animate('200ms')),
