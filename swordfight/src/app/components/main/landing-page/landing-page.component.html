@@ -1,4 +1,9 @@
-<svg *ngIf="!fight" class="fullsvg" viewBox="0 0 100 100">
-    <g app-boxed-sword color="#ff0000" (click)="clickButton()"></g>
-</svg>
+<div *ngIf="!fight" class="fullpage" style="font-size: 2em; color: white;" >
+    <div class="spotlight">
+        <div class="button" (click)="clickButton()">Combatti!</div>
+        <div class="button" (click)="shared.showAllSwingButtons = !shared.showAllSwingButtons">Tutti: {{shared.showAllSwingButtons}}</div>
+        <div class="button" (click)="shared.showLastSwingButtons = !shared.showLastSwingButtons">Ultimo: {{shared.showLastSwingButtons}}</div>
+    </div>
+</div>
+
 <app-duel-buttons *ngIf="fight"></app-duel-buttons>

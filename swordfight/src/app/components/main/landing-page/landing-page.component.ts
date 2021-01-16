@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 import { SwordsItem, SwordsService } from 'src/app/swords.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class LandingPageComponent implements OnInit {
   sword: SwordsItem;
 
   constructor(
+    public shared: SharedDataService,
     private audio: AudioPlayService,
     private route: Router,
     ) { }
@@ -28,5 +30,7 @@ export class LandingPageComponent implements OnInit {
   clickButton() {
     this.route.navigate(['fight']);
   };
+
+  
 
 }
