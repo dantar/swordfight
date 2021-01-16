@@ -6,7 +6,12 @@ import { Injectable } from '@angular/core';
 export class SharedDataService {
 
   theme: string;
+  showAllSwingButtons: boolean;
+  showLastSwingButtons: boolean;
 
-  constructor() { }
+  constructor() {
+    this.showAllSwingButtons = true;
+    this.showLastSwingButtons = true;
+  }
   
 }

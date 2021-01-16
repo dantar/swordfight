@@ -5,6 +5,7 @@ import { GamesCommonService } from 'src/app/services/games-common.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TickersService } from 'src/app/services/tickers.service';
 import { SwordsService } from 'src/app/swords.service';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
   selector: 'app-duel-buttons',
@@ -67,6 +68,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     private audio: AudioPlayService,
     private tickers: TickersService,
     private swords: SwordsService,
+    private shared: SharedDataService,
   ) { }
 
   ngOnDestroy(): void {
@@ -115,6 +117,11 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   style(button: ActionButton): string {
     return `opacity:${this.current(button) ? 0.1 : 0};`;
+  }
+
+  showButton(button: ActionButton): boolean {
+    return (this.sequence[this.step] === button.name) && (
+      this.shared.showAllSwingButtons || (this.shared.showLastSwingButtons && this.step === this.sequence.length-1));
   }
 
   current(button: ActionButton): boolean {
