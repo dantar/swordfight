@@ -14,11 +14,11 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
   animations: [
     trigger('thesword', [
       // states
-      state('mighty', style({
+      state('fatal', style({
         transform: 'translate(50px,50px) scale(1.1) rotate(45deg)',
       })),
       state('won', style({
-        transform: 'translate(50px,50px) scale(1.3) rotate(20deg)',
+        transform: 'translate(90px,90px) scale(1.5) rotate(20deg)',
       })),
       state('rest', style({
         transform: 'translate(95px,80px) scale(1.5) rotate(20deg)',
@@ -42,7 +42,7 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
       transition('* => swingD', animate('200ms')),
       transition('* => rest', animate('1000ms')),
       transition('* => won', animate('1000ms')),
-      transition('* => mighty', animate('100ms')),
+      transition('* => fatal', animate('100ms')),
     ]),
   ],
 })
@@ -121,7 +121,15 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   showButton(button: ActionButton): boolean {
     return (this.sequence[this.step] === button.name) && (
-      this.shared.showAllSwingButtons || (this.shared.showLastSwingButtons && this.step === this.sequence.length-1));
+      this.shared.showAllSwingButtons || (this.shared.showLastSwingButtons && this.isLastStep()));
+  }
+
+  isLastStep(): boolean {
+    return this.step === this.sequence.length-1;
+  }
+
+  showFatal(): boolean {
+    return this.ready && this.isLastStep();
   }
 
   current(button: ActionButton): boolean {
@@ -144,7 +152,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   swordDone(event: any) {
     console.log(event);
-    if (event.toState === 'mighty') {
+    if (event.toState === 'fatal') {
       if (this.scaleFatal() > 0) {
         this.audio.play(this.swords.sound('fatal'));
         this.winMatch();
@@ -250,7 +258,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   clickWin() {
-    this.swordState = 'mighty';
+    this.swordState = 'fatal';
   }
 
   scaleFatal(): number {

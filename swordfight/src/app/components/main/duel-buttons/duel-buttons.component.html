@@ -20,7 +20,7 @@
 
     <g app-enemy-orc [enemyState]="enemyState" [enemyLevel]="enemyLevel" (enemyDone)="enemyDone($event)"></g>
 
-    <g [attr.transform]="transformFatal()" *ngIf="ready" style="opacity:0.4;">
+    <g [attr.transform]="transformFatal()" *ngIf="showFatal()" style="opacity:0.4;">
         <g app-strike-fatal></g>
     </g>
 
