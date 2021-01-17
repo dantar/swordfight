@@ -93,7 +93,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.finishedSequence();
     this.hits = 20;
     this.totalScore = 0;
-    this.score = 10;
+    this.score = this.shared.swingSpeedScore;
     this.enemyLevel = Math.max(0, this.enemyLevel + delta);
     this.swordState = 'rest';
     this.enemyState = 'rest';
@@ -196,7 +196,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.tickers.stop('hits');
       this.tickers.stop('score');
       this.totalScore = this.totalScore + this.score;
-      this.score = 10;
+      this.score = this.shared.swingSpeedScore;
+      this.totalScore = this.totalScore + this.shared.swingStepScore;
       this.audio.play(this.swords.sound(this.currentAction.name));
       this.step++;
       if (this.step >= this.sequence.length) {

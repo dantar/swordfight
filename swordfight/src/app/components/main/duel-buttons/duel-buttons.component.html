@@ -1,19 +1,18 @@
-<div class="panel-menu-list top-left-menu">
-  <div class="panel-menu-item">
-    <span style="font-size: 1.5em; color: yellow;">{{enemyLevel}}</span>
-  </div>
-  <div class="panel-menu-item">
-    <span style="font-size: 1.5em; color: white;" *ngIf="score >= 0">{{totalScore}}({{score}})</span>
-  </div>
-  <div class="panel-menu-item">
-    <span style="font-size: 1.5em; color: red;" *ngIf="score >= 0">{{hits}}</span>
-  </div>
-</div>
-
 <svg class="fullsvg" viewBox="0 0 100 100">
-    
+
+    <g id="background-cave">
+        <path id="path539"
+            d="M -4.0406102,69.695424 C 77.626442,57.569004 67.511863,68.011837 103.2881,67.170043 c 46.91054,1.959764 48.9589,25.331022 69.44798,39.901027 L 111.62185,-76.27162 H -7.5761441 L -68.437834,97.474619 c 18.38353,-9.413842 10.11436,-20.160319 64.3972238,-27.779195 z"
+            style="fill:#000000;stroke:#6c5d53;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+            style="fill:#483737;stroke:#241c1c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+            d="M -4.0406102,69.695424 C 77.626442,57.569004 67.511863,68.011837 103.2881,67.170043 c 46.91054,1.959764 48.9589,25.331022 69.44798,39.901027 l -64.64976,79.29697 H -11.111678 L -68.437834,97.474619 c 18.38353,-9.413842 10.11436,-20.160319 64.3972238,-27.779195 z"
+            id="path537" />
+    </g>
+
     <g *ngIf="ready && swordState!='dead'">
-        <g *ngFor="let button of buttons" style="opacity:{{showButton(button) ? 0.3 : 0}};" [attr.transform]="transform(button)" >
+        <g *ngFor="let button of buttons" style="opacity:{{showButton(button) ? 0.3 : 0}};"
+            [attr.transform]="transform(button)">
             <g app-boxed-sword [color]="button.color"></g>
         </g>
     </g>
@@ -24,9 +23,11 @@
         <g app-strike-fatal></g>
     </g>
 
-    <g *ngIf="swordState!='dead'" [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword color="#00ff00"></g>
+    <g *ngIf="swordState!='dead'" [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword
+        color="#00ff00"></g>
     <g *ngIf="ready && swordState!='dead'">
-        <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)" (click)="clickAction(button)" >
+        <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)"
+            (click)="clickAction(button)">
             <rect x="0" y="0" width="100" height="100" style="fill: {{button.color}};" />
         </g>
         <g (click)="clickWin()" [attr.transform]="transformFatal()" style="opacity:0;">
@@ -34,6 +35,19 @@
         </g>
     </g>
 </svg>
+
+<div class="panel-menu-list top-left-menu">
+    <div class="panel-menu-item">
+        <span style="font-size: 1.5em; color: yellow;">{{enemyLevel}}</span>
+    </div>
+    <div class="panel-menu-item">
+        <span style="font-size: 1.5em; color: white;" *ngIf="score >= 0">{{totalScore}}({{score}})</span>
+    </div>
+    <div class="panel-menu-item">
+        <span style="font-size: 1.5em; color: red;" *ngIf="score >= 0">{{hits}}</span>
+    </div>
+</div>
+
 <div class="fullpage" style="font-size: 2em; color: white;" *ngIf="swordState === 'dead' || enemyState === 'dead'">
     <div class="spotlight">
         <div class="button" (click)="newGame(2)">+2</div>
