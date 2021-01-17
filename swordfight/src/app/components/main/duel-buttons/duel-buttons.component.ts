@@ -263,7 +263,12 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   scaleFatal(): number {
-    return Math.max(0, Math.min(0.4, this.totalScore / 10 - 2));
+    if (this.totalScore > this.shared.enemyDefeatScore) {
+      let chance = this.totalScore - this.shared.enemyDefeatScore;
+      return Math.max(0, Math.min(0.4, chance * 0.4 / this.shared.enemyDefeatScore));
+    } else {
+      return 0;
+    }
   }
 
   transformFatal() {
