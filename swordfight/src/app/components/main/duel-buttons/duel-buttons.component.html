@@ -10,14 +10,14 @@
             id="path537" />
     </g>
 
+    <g app-enemy-orc [enemyState]="enemyState" [enemyLevel]="enemyLevel" (enemyDone)="enemyDone($event)"></g>
+
     <g *ngIf="ready && swordState!='dead'">
         <g *ngFor="let button of buttons" style="opacity:{{showButton(button) ? 0.3 : 0}};"
             [attr.transform]="transform(button)">
             <g app-boxed-sword [color]="button.color"></g>
         </g>
     </g>
-
-    <g app-enemy-orc [enemyState]="enemyState" [enemyLevel]="enemyLevel" (enemyDone)="enemyDone($event)"></g>
 
     <g [attr.transform]="transformFatal()" *ngIf="showFatal()" style="opacity:0.4;">
         <g app-strike-fatal></g>
@@ -30,7 +30,7 @@
             (click)="clickAction(button)">
             <rect x="0" y="0" width="100" height="100" style="fill: {{button.color}};" />
         </g>
-        <g (click)="clickWin()" [attr.transform]="transformFatal()" style="opacity:0;">
+        <g *ngIf="showFatal()" (click)="clickWin()" [attr.transform]="transformFatal()" style="opacity:0;">
             <g app-strike-fatal></g>
         </g>
     </g>
