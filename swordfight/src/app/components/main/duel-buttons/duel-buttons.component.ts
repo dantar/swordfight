@@ -97,12 +97,15 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.enemyLevel = Math.max(0, this.enemyLevel + delta);
     this.swordState = 'rest';
     this.enemyState = 'rest';
+    this.shared.levelUpSequence(delta);
   }
 
   levelUp() {
     this.step = 0;
-    this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
-    this.sequence.push(this.lastPicked);
+    if (this.sequence.length < this.shared.enemyMaxSequenceLength) {
+      this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
+      this.sequence.push(this.lastPicked);
+    }
     this.enemyState = this.sequence[this.step];
   }
 
@@ -116,7 +119,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   style(button: ActionButton): string {
-    return `opacity:${this.current(button) ? 0.1 : 0};`;
+    return `opacity:${this.sequence[this.step] === button.name ? 0.1 : 0};`;
   }
 
   showButton(button: ActionButton): boolean {
@@ -132,36 +135,18 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     return (this.enemyState === 'fatal') || (this.ready && this.isLastStep());
   }
 
-  current(button: ActionButton): boolean {
-    return this.sequence[this.step] === button.name;
-  }
-
   clickAction(button: ActionButton) {
-    if (this.ready) {
-      this.currentAction = button;
-      if (this.swordState == this.currentAction.name) {
-        this.swordState = 'rest';
-      } else {
-        this.swordState = this.currentAction.name;
-      }
+    this.currentAction = button;
+    if (this.swordState == this.currentAction.name) {
+      console.log('canceld action!');
+      this.swordState = 'rest';
     } else {
-      this.ready = true;
-      this.levelUp();
+      this.swordState = this.currentAction.name;
     }
   }
 
   swordDone(event: any) {
-    console.log(event);
-    if (event.toState === 'fatal') {
-      if (this.scaleFatal() > 0) {
-        this.audio.play(this.swords.sound('fatal'));
-        this.winMatch();
-      } else {
-        // play taunt "ah ah not yet jedi!"
-        this.swordState = 'rest';
-      }
-    }
-    if (this.currentAction && this.currentAction.name == event.toState) {
+    if (event.toState === this.swordState) {
       this.checkAction();
       this.swordState = 'rest';
     }
@@ -197,22 +182,34 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   checkAction() {
-    if (this.current(this.currentAction)) {
-      this.tickers.stop('hits');
-      this.tickers.stop('score');
-      this.totalScore = this.totalScore + this.score;
-      this.score = this.shared.swingSpeedScore;
-      this.totalScore = this.totalScore + this.shared.swingStepScore;
-      this.audio.play(this.swords.sound(this.currentAction.name));
-      this.step++;
-      if (this.step >= this.sequence.length) {
-        this.finishedSequence()
+    if (this.swordState === 'fatal') {
+      if (this.scaleFatal() > 0) {
+        this.audio.play(this.swords.sound('fatal'));
+        this.winMatch();
       } else {
-        this.enemyState = this.sequence[this.step];
-        this.scoreStartCountDown();
+        // play taunt "ah ah not yet jedi!"
+        this.swordState = 'rest';
       }
-    } else {
-      this.audio.play(this.swords.sound('missed'));
+    }
+    if (this.swordState.startsWith('swing')) {
+      if (this.swordState === this.sequence[this.step]) {
+        this.tickers.stop('hits');
+        this.tickers.stop('score');
+        this.totalScore = this.totalScore + this.score + this.shared.swingStepScore;
+        this.score = this.shared.swingSpeedScore;
+        this.audio.play(this.swords.sound(this.currentAction.name));
+        this.step++;
+        if (this.step >= this.sequence.length) {
+          this.finishedSequence()
+        } else {
+          this.enemyState = this.sequence[this.step];
+          this.scoreStartCountDown();
+          this.swordState = 'rest';
+        }
+      } else {
+        this.audio.play(this.swords.sound('missed'));
+        this.swordState = 'rest';
+      }
     }
   }
 
@@ -268,15 +265,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   scaleFatal(): number {
-    if (this.enemyState === 'fatal') {
-      return 0.4;
-    }
-    if (this.totalScore > this.shared.enemyDefeatScore) {
-      let chance = this.totalScore - this.shared.enemyDefeatScore;
-      return Math.max(0, Math.min(0.4, chance * 0.4 / this.shared.enemyDefeatScore));
-    } else {
-      return 0;
-    }
+    return this.enemyState === 'fatal' || this.totalScore > this.shared.enemyDefeatScore ? 0.4: 0;
   }
 
   transformFatal() {

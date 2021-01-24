@@ -18,8 +18,12 @@ export class SharedDataService {
     this.showLastSwingButtons = true;
     this.swingSpeedScore = 5;
     this.swingStepScore = 2;
-    this.enemyDefeatScore = 30;
-    this.enemyMaxSequenceLength = 3;
+    this.enemyDefeatScore = 20;
+    this.enemyMaxSequenceLength = 1;
   }
-  
+
+  levelUpSequence(delta: number) {
+    throw this.enemyMaxSequenceLength = Math.max(1, this.enemyMaxSequenceLength + delta);
+  }
+
 }
