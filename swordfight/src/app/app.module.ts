@@ -13,6 +13,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BroadswordComponent } from './components/swords/broadsword/broadsword.component';
 import { StrikeFatalComponent } from './components/parts/strike-fatal/strike-fatal.component';
 import { EnemyOrcComponent } from './components/enemies/enemy-orc/enemy-orc.component';
+import { IconLockedComponent } from './components/buttons/icon-locked/icon-locked.component';
+import { IconOrcComponent } from './components/buttons/icon-orc/icon-orc.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { EnemyOrcComponent } from './components/enemies/enemy-orc/enemy-orc.comp
     BroadswordComponent,
     StrikeFatalComponent,
     EnemyOrcComponent,
+    IconLockedComponent,
+    IconOrcComponent,
   ],
   imports: [
     BrowserModule,

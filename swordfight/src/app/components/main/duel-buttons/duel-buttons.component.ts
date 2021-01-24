@@ -129,7 +129,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   showFatal(): boolean {
-    return this.ready && this.isLastStep();
+    return (this.enemyState === 'fatal') || (this.ready && this.isLastStep());
   }
 
   current(button: ActionButton): boolean {
@@ -185,6 +185,11 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
         this.scoreStartCountDown();
       });
     }
+    if (event.toState === 'fatal' && this.enemyState === 'fatal' && this.swordState != 'dead') {
+      this.ready = true;
+      this.levelUp();
+      this.scoreStartCountDown();
+    }
     if (event.toState === this.enemyState && this.enemyState.startsWith('swing') && this.enemyState != this.swordState) {
       this.audio.play('grunt1');
       this.hitsStartCountUp(50);
@@ -201,11 +206,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.audio.play(this.swords.sound(this.currentAction.name));
       this.step++;
       if (this.step >= this.sequence.length) {
-        if (this.totalScore > 200) {        
-          this.winMatch();
-        } else {
-          this.finishedSequence()
-        }
+        this.finishedSequence()
       } else {
         this.enemyState = this.sequence[this.step];
         this.scoreStartCountDown();
@@ -232,7 +233,11 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   finishedSequence() {
     this.swordState = 'rest';
-    this.enemyState = 'rest';
+    if (this.sequence.length >= this.shared.enemyMaxSequenceLength) {
+      this.enemyState = 'fatal';
+    } else {
+      this.enemyState = 'rest';
+    }
     this.ready = false;
     this.tickers.stop('rest');
     this.tickers.stop('hits');
@@ -263,6 +268,9 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   scaleFatal(): number {
+    if (this.enemyState === 'fatal') {
+      return 0.4;
+    }
     if (this.totalScore > this.shared.enemyDefeatScore) {
       let chance = this.totalScore - this.shared.enemyDefeatScore;
       return Math.max(0, Math.min(0.4, chance * 0.4 / this.shared.enemyDefeatScore));

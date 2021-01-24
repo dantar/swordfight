@@ -28,7 +28,8 @@ export class LandingPageComponent implements OnInit {
   }
 
   clickButton() {
-    this.route.navigate(['fight']);
+    this.fight = true;
+    //this.route.navigate(['fight']);
   };
 
   

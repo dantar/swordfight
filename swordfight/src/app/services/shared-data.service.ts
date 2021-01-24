@@ -11,6 +11,7 @@ export class SharedDataService {
   swingSpeedScore: number;
   swingStepScore: number;
   enemyDefeatScore: number;
+  enemyMaxSequenceLength: number;
 
   constructor() {
     this.showAllSwingButtons = true;
@@ -18,6 +19,7 @@ export class SharedDataService {
     this.swingSpeedScore = 5;
     this.swingStepScore = 2;
     this.enemyDefeatScore = 30;
+    this.enemyMaxSequenceLength = 3;
   }
   
 }

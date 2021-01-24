@@ -18,6 +18,9 @@ let animationParameters = {
       state('rest', style({
         transform: 'translate(45px,50px) scale(1) rotate(70deg)',
       }), {params: animationParameters}),
+      state('fatal', style({
+        transform: 'translate(50px,90px) scale(1) rotate(90deg)',
+      }), {params: animationParameters}),
       state('swingA', style({
         transform: 'translate(20px,25px) scale(1.8) rotate(10deg)',
       }), {params: animationParameters}),
@@ -41,6 +44,7 @@ let animationParameters = {
       transition('* => rest', animate('800ms')),
       transition('* => won', animate('1000ms')),
       transition('* => dead', animate('400ms')),
+      transition('* => fatal', animate('1200ms')),
     ]),
 
   ],
