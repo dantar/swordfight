@@ -67,7 +67,6 @@ export class EnemyOrcComponent implements OnInit {
 
   currentDelay(): number {
     return 650;
-    //return 300 + 1000 *  3 / (1 + this.enemyLevel);
   }
 
 }
