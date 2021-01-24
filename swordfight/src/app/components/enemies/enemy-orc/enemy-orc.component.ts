@@ -44,7 +44,7 @@ let animationParameters = {
       transition('* => rest', animate('800ms')),
       transition('* => won', animate('1000ms')),
       transition('* => dead', animate('400ms')),
-      transition('* => fatal', animate('1200ms')),
+      transition('* => fatal', animate('1000ms')),
     ]),
 
   ],
@@ -52,7 +52,6 @@ let animationParameters = {
 export class EnemyOrcComponent implements OnInit {
 
   @Input() enemyState: string;
-  @Input() enemyLevel: number;
   @Output() enemyDone = new EventEmitter();
 
   swordSwingScale: 1.2;
@@ -67,7 +66,8 @@ export class EnemyOrcComponent implements OnInit {
   }
 
   currentDelay(): number {
-    return 300 + 1000 *  3 / (1 + this.enemyLevel);
+    return 650;
+    //return 300 + 1000 *  3 / (1 + this.enemyLevel);
   }
 
 }

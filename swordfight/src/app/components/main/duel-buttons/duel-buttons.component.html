@@ -10,7 +10,7 @@
             id="path537" />
     </g>
 
-    <g app-enemy-orc [enemyState]="enemyState" [enemyLevel]="enemyLevel" (enemyDone)="enemyDone($event)"></g>
+    <g app-enemy-orc [enemyState]="enemyState" (enemyDone)="enemyDone($event)"></g>
 
     <g *ngIf="ready && swordState!='dead'">
         <g *ngFor="let button of buttons" style="opacity:{{showButton(button) ? 0.3 : 0}};"

@@ -61,8 +61,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   score: number;
   hits: number;
 
-  enemyLevel: number;
-
   constructor(
     private games: GamesCommonService,
     private audio: AudioPlayService,
@@ -83,7 +81,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       { name: 'swingD', rotate: 0, color: '#ff00ff', sound: 'block4' },
     ];
     this.audio.setTheme('battle1');
-    this.enemyLevel = 5;
     this.newGame(0);
   }
 
@@ -94,10 +91,15 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.hits = 20;
     this.totalScore = 0;
     this.score = this.shared.swingSpeedScore;
-    this.enemyLevel = 3; //Math.max(0, this.enemyLevel + delta);
     this.swordState = 'rest';
     this.enemyState = 'rest';
     this.shared.levelUpSequence(delta);
+  }
+
+  enemyAttacks() {
+    this.enemyState = this.sequence[this.step];
+    this.scoreStartCountDown();
+    this.swordState = 'rest';
   }
 
   levelUp() {
@@ -152,13 +154,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     }
   }
 
-  enemyStateWithParameters() {
-    return {value: this.enemyState, params: {delay: this.currentDelay()}}
-  }
-  currentDelay(): number {
-    return 300 + 1000 *  3 / (1 + this.enemyLevel);
-  }
-
   enemyDone(event: any) {
     if (event.toState === 'dead' && this.enemyState === 'dead') {
       // enemy is dead dead
@@ -207,7 +202,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   scoreStartCountDown() {
-    this.tickers.loop('score', this.currentDelay() / 10, () => {
+    this.tickers.loop('score', 200, () => {
       this.score = Math.max(0, this.score - 1);
     });
   }
@@ -232,9 +227,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
           this.finishedSequence()
         } else {
           // enemy attaks
-          this.enemyState = this.sequence[this.step];
-          this.scoreStartCountDown();
-          this.swordState = 'rest';
+          this.enemyAttacks();
         }
       }
     } else {
