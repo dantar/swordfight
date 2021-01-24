@@ -94,7 +94,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.hits = 20;
     this.totalScore = 0;
     this.score = this.shared.swingSpeedScore;
-    this.enemyLevel = Math.max(0, this.enemyLevel + delta);
+    this.enemyLevel = 3; //Math.max(0, this.enemyLevel + delta);
     this.swordState = 'rest';
     this.enemyState = 'rest';
     this.shared.levelUpSequence(delta);
@@ -102,7 +102,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   levelUp() {
     this.step = 0;
-    if (this.sequence.length < this.shared.enemyMaxSequenceLength) {
+    if (this.shared.enemyMaxSequenceLength != null && this.sequence.length < this.shared.enemyMaxSequenceLength) {
       this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
       this.sequence.push(this.lastPicked);
     }
@@ -171,6 +171,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       });
     }
     if (event.toState === 'fatal' && this.enemyState === 'fatal' && this.swordState != 'dead') {
+      this.totalScore = 0;
       this.ready = true;
       this.levelUp();
       this.scoreStartCountDown();
@@ -192,24 +193,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       }
     }
     if (this.swordState.startsWith('swing')) {
-      if (this.swordState === this.sequence[this.step]) {
-        this.tickers.stop('hits');
-        this.tickers.stop('score');
-        this.totalScore = this.totalScore + this.score + this.shared.swingStepScore;
-        this.score = this.shared.swingSpeedScore;
-        this.audio.play(this.swords.sound(this.currentAction.name));
-        this.step++;
-        if (this.step >= this.sequence.length) {
-          this.finishedSequence()
-        } else {
-          this.enemyState = this.sequence[this.step];
-          this.scoreStartCountDown();
-          this.swordState = 'rest';
-        }
-      } else {
-        this.audio.play(this.swords.sound('missed'));
-        this.swordState = 'rest';
-      }
+      this.checkSwing();
     }
   }
 
@@ -228,13 +212,49 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     });
   }
 
+  checkSwing() {
+    if (this.swordState === this.sequence[this.step]) {
+      this.tickers.stop('hits');
+      this.tickers.stop('score');
+      this.totalScore = this.totalScore + this.score + this.shared.swingStepScore;
+      this.score = this.shared.swingSpeedScore;
+      this.audio.play(this.swords.sound(this.currentAction.name));
+      this.step++;
+      if ((this.shared.enemyDefeatScore != null && this.totalScore > this.shared.enemyDefeatScore)
+      || (this.shared.enemyMaxSequenceLength != null && this.step >= this.sequence.length && this.sequence.length >= this.shared.enemyMaxSequenceLength)
+      ) {
+        // hai sferrato un colpo vincente
+        this.enemyIsDefeated();
+      } else {
+        // non hai sferrato un colpo vincente
+        if (this.step >= this.sequence.length) {
+          // hai sferrato l'ultimo colpo della sequenza (ma non hai vinto)
+          this.finishedSequence()
+        } else {
+          // enemy attaks
+          this.enemyState = this.sequence[this.step];
+          this.scoreStartCountDown();
+          this.swordState = 'rest';
+        }
+      }
+    } else {
+      // hai sbagliato colpo
+      this.audio.play(this.swords.sound('missed'));
+      this.swordState = 'rest';
+    }
+  }
+
+  enemyIsDefeated() {
+    this.swordState = 'rest';
+    this.enemyState = 'fatal';
+    this.ready = false;
+    this.tickers.stop('rest');
+    this.tickers.stop('hits');
+  }
+
   finishedSequence() {
     this.swordState = 'rest';
-    if (this.sequence.length >= this.shared.enemyMaxSequenceLength) {
-      this.enemyState = 'fatal';
-    } else {
-      this.enemyState = 'rest';
-    }
+    this.enemyState = 'rest';
     this.ready = false;
     this.tickers.stop('rest');
     this.tickers.stop('hits');
@@ -265,7 +285,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   scaleFatal(): number {
-    return this.enemyState === 'fatal' || this.totalScore > this.shared.enemyDefeatScore ? 0.4: 0;
+    return this.enemyState === 'fatal' ? 0.4: 0;
   }
 
   transformFatal() {
