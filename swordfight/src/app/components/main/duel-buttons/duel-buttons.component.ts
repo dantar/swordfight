@@ -285,4 +285,16 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     return `translate(50 50) scale(${this.scaleFatal()}) translate(-50 -50)`;
   }
 
+  backToMenu() {
+    console.log('backToMenu');
+  }
+
+  playAgain() {
+    this.newGame(0);
+  }
+
+  playNext() {
+    this.newGame(1);
+  }
+
 }

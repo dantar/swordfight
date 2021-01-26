@@ -32,6 +32,14 @@ export class LandingPageComponent implements OnInit {
     //this.route.navigate(['fight']);
   };
 
-  
+  clickOrc(button: OrcFightButton) {
+    this.shared.enemyMaxSequenceLength = button.level;
+    this.fight = true;
+  }
 
+}
+
+class OrcFightButton {
+  level: number;
+  locked: boolean;
 }

@@ -15,6 +15,7 @@ import { StrikeFatalComponent } from './components/parts/strike-fatal/strike-fat
 import { EnemyOrcComponent } from './components/enemies/enemy-orc/enemy-orc.component';
 import { IconLockedComponent } from './components/buttons/icon-locked/icon-locked.component';
 import { IconOrcComponent } from './components/buttons/icon-orc/icon-orc.component';
+import { FightDebriefComponent } from './components/main/fight-debrief/fight-debrief.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { IconOrcComponent } from './components/buttons/icon-orc/icon-orc.compone
     EnemyOrcComponent,
     IconLockedComponent,
     IconOrcComponent,
+    FightDebriefComponent,
   ],
   imports: [
     BrowserModule,

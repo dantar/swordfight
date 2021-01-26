@@ -45,12 +45,4 @@
     </div>
 </div>
 
-<div class="fullpage" style="font-size: 2em; color: white;" *ngIf="swordState === 'dead' || enemyState === 'dead'">
-    <div class="spotlight">
-        <div class="button" (click)="newGame(2)">+2</div>
-        <div class="button" (click)="newGame(1)">+1</div>
-        <div class="button" (click)="newGame(0)">+0</div>
-        <div class="button" (click)="newGame(-1)">-1</div>
-        <div class="button" (click)="newGame(-2)">-2</div>
-    </div>
-</div>
+<app-fight-debrief *ngIf="swordState === 'dead' || enemyState === 'dead'" [enableNext]="enemyState === 'dead'" (backToMenu)="backToMenu()" (playNext)="playNext()" (playAgain)="playAgain()"></app-fight-debrief>
