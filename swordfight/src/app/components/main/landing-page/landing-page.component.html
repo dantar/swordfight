@@ -1,19 +1,13 @@
-<div *ngIf="!fight" class="fullpage" style="font-size: 2em; color: white;" >
-    <div class="spotlight">
-        Combatti!
-        <div class="button" (click)="clickButton()">
-            <svg viewBox="0 0 100 100" width="50px" height="50px">
-                <g app-icon-orc></g>
-            </svg>
-        </div>
-        <div class="button">
-            <svg viewBox="0 0 100 100" width="50px" height="50px">
-                <g app-icon-locked></g>
-            </svg>
-        </div>
-        <div class="button" (click)="shared.showAllSwingButtons = !shared.showAllSwingButtons">Tutti: {{shared.showAllSwingButtons}}</div>
-        <div class="button" (click)="shared.showLastSwingButtons = !shared.showLastSwingButtons">Ultimo: {{shared.showLastSwingButtons}}</div>
+<div *ngIf="!shared.enemy" class="fullpage" style="font-size: 2em; color: white;" >
+    <div class="button" *ngFor="let enemy of shared.enemies" (click)="clickEnemy(enemy)">
+        <svg viewBox="0 0 100 100" width="50px" height="50px">
+            <g *ngIf="!enemy.locked" app-icon-orc></g>
+            <g *ngIf="enemy.locked" app-icon-locked></g>
+        </svg>
     </div>
+    <div class="button" (click)="shared.showAllSwingButtons = !shared.showAllSwingButtons">Tutti: {{shared.showAllSwingButtons}}</div>
+    <div class="button" (click)="shared.showLastSwingButtons = !shared.showLastSwingButtons">Ultimo: {{shared.showLastSwingButtons}}</div>
+    <div style="height: 140px;"></div>
 </div>
 
-<app-duel-buttons *ngIf="fight"></app-duel-buttons>
+<app-duel-buttons *ngIf="shared.enemy"></app-duel-buttons>

@@ -45,4 +45,8 @@
     </div>
 </div>
 
-<app-fight-debrief *ngIf="swordState === 'dead' || enemyState === 'dead'" [enableNext]="enemyState === 'dead'" (backToMenu)="backToMenu()" (playNext)="playNext()" (playAgain)="playAgain()"></app-fight-debrief>
+<app-fight-debrief *ngIf="swordState === 'dead' || enemyState === 'dead'" 
+    [enableNext]="enemyState === 'dead'" 
+    (backToMenu)="backToMenu()" 
+    (playNext)="playNext()" 
+    (playAgain)="playAgain()"></app-fight-debrief>

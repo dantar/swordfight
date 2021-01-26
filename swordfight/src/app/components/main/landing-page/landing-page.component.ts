@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
-import { SharedDataService } from 'src/app/services/shared-data.service';
+import { EnemyFighterStats, SharedDataService } from 'src/app/services/shared-data.service';
 import { SwordsItem, SwordsService } from 'src/app/swords.service';
 
 @Component({
@@ -11,8 +11,6 @@ import { SwordsItem, SwordsService } from 'src/app/swords.service';
   styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit {
-
-  fight: boolean;
 
   sword: SwordsItem;
 
@@ -23,18 +21,13 @@ export class LandingPageComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.fight = false;
     this.audio.setTheme('theme-01');
   }
 
-  clickButton() {
-    this.fight = true;
-    //this.route.navigate(['fight']);
-  };
-
-  clickOrc(button: OrcFightButton) {
-    this.shared.enemyMaxSequenceLength = button.level;
-    this.fight = true;
+  clickEnemy(enemy: EnemyFighterStats) {
+    if (!enemy.locked) {
+      this.shared.fightEnemy(enemy);
+    }
   }
 
 }

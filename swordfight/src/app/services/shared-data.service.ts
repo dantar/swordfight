@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SharedDataService {
-
   theme: string;
   showAllSwingButtons: boolean;
   showLastSwingButtons: boolean;
@@ -14,6 +13,9 @@ export class SharedDataService {
   enemyMaxSequenceLength: number;
   enemySwingDelay: number;
 
+  enemies: EnemyFighterStats[];
+  enemy: EnemyFighterStats;
+
   constructor() {
     this.showAllSwingButtons = true;
     this.showLastSwingButtons = true;
@@ -22,10 +24,42 @@ export class SharedDataService {
     this.enemyDefeatScore = null;
     this.enemyMaxSequenceLength = 1;
     this.enemySwingDelay = 600;
+    this.enemies = [];
+    for (let index = 1; index <= 12; index++) {
+      this.enemies.push(
+        {maxSequenceLength: index, locked: index != 1}
+      );
+    }
+    this.enemy = null;
   }
 
-  levelUpSequence(delta: number) {
-    this.enemyMaxSequenceLength = Math.max(1, this.enemyMaxSequenceLength + delta);
+  unlockNext() {
+    this.enemies[this.enemies.indexOf(this.enemy) + 1].locked = false;
   }
+
+  fightNext() {
+    this.enemy = this.enemies[this.enemies.indexOf(this.enemy) + 1];
+    this._setupstats();
+  }
+
+  dropEnemy() {
+    this.enemy = null;
+  }
+
+  private _setupstats() {
+    this.enemyMaxSequenceLength = this.enemy.maxSequenceLength;
+  }
+
+  fightEnemy(enemy: EnemyFighterStats) {
+    this.enemy = enemy;
+    this._setupstats();
+  }
+
+}
+
+export class EnemyFighterStats {
+
+  maxSequenceLength: number;
+  locked: boolean;
 
 }

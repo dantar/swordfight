@@ -93,7 +93,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.score = this.shared.swingSpeedScore;
     this.swordState = 'rest';
     this.enemyState = 'rest';
-    this.shared.levelUpSequence(delta);
   }
 
   enemyAttacks() {
@@ -261,6 +260,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.ready = false;
     this.enemyState = 'dead';
     this.swordState = 'won';
+    this.shared.unlockNext();
   }
 
   loseMatch() {
@@ -286,7 +286,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   backToMenu() {
-    console.log('backToMenu');
+    this.shared.dropEnemy();
   }
 
   playAgain() {
@@ -294,7 +294,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   playNext() {
-    this.newGame(1);
+    this.shared.fightNext();
+    this.newGame(0);
   }
 
 }
