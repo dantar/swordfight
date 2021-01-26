@@ -12,6 +12,7 @@ export class SharedDataService {
   swingStepScore: number;
   enemyDefeatScore: number;
   enemyMaxSequenceLength: number;
+  enemySwingDelay: number;
 
   constructor() {
     this.showAllSwingButtons = true;
@@ -20,6 +21,7 @@ export class SharedDataService {
     this.swingStepScore = 2;
     this.enemyDefeatScore = null;
     this.enemyMaxSequenceLength = 1;
+    this.enemySwingDelay = 600;
   }
 
   levelUpSequence(delta: number) {

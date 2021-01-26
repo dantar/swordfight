@@ -1,5 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { SharedDataService } from 'src/app/services/shared-data.service';
 
 let animationParameters = {
   swordSwingScale: 0.4,
@@ -56,17 +57,13 @@ export class EnemyOrcComponent implements OnInit {
 
   swordSwingScale: 1.2;
 
-  constructor() { }
+  constructor(private shared: SharedDataService) { }
 
   ngOnInit(): void {
   }
 
   enemyStateWithParameters() {
-    return {value: this.enemyState, params: {delay: this.currentDelay(), swordSwingScale: 1.2}}
-  }
-
-  currentDelay(): number {
-    return 650;
+    return {value: this.enemyState, params: {delay: this.shared.enemySwingDelay, swordSwingScale: 1.2}}
   }
 
 }
