@@ -48,6 +48,43 @@ let animationParameters = {
       transition('* => fatal', animate('1000ms')),
     ]),
 
+    trigger('orcShield', [
+      // states
+      state('won', style({
+        transform: 'translate(5px,5px)',
+      }), {params: animationParameters}),
+      state('rest', style({
+        transform: 'scale(1)',
+      }), {params: animationParameters}),
+      state('fatal', style({
+        transform: 'translate(20px,10px)',
+      }), {params: animationParameters}),
+      state('swingA', style({
+        transform: 'translate(5px,5px)',
+      }), {params: animationParameters}),
+      state('swingB', style({
+        transform: 'translate(-5px,-5px)',
+      }), {params: animationParameters}),
+      state('swingC', style({
+        transform: 'translate(5px,-5px)',
+      }), {params: animationParameters}),
+      state('swingD', style({
+        transform: 'translate(5px,-5px)',
+      }), {params: animationParameters}),
+      state('dead', style({
+        transform: 'translate(15px,25px)',
+      }), {params: animationParameters}),
+      // transitions
+      transition('* => swingA', animate('{{delay}}ms')),
+      transition('* => swingB', animate('{{delay}}ms')),
+      transition('* => swingC', animate('{{delay}}ms')),
+      transition('* => swingD', animate('{{delay}}ms')),
+      transition('* => rest', animate('800ms')),
+      transition('* => won', animate('1000ms')),
+      transition('* => dead', animate('400ms')),
+      transition('* => fatal', animate('1000ms')),
+    ]),
+
   ],
 })
 export class EnemyOrcComponent implements OnInit {
