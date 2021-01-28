@@ -30,6 +30,13 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
+  transformEnemy(enemy: EnemyFighterStats): string {
+    let index = this.shared.enemies.indexOf(enemy);
+    let x = index % 4;
+    let y = (index - x) /4;
+    return `translate(${100 * x} ${100 * y})`;
+  }
+
 }
 
 class OrcFightButton {
