@@ -17,6 +17,7 @@ import { IconLockedComponent } from './components/buttons/icon-locked/icon-locke
 import { IconOrcComponent } from './components/buttons/icon-orc/icon-orc.component';
 import { FightDebriefComponent } from './components/main/fight-debrief/fight-debrief.component';
 import { GameOptionsComponent } from './components/main/game-options/game-options.component';
+import { StatsLifeComponent } from './components/buttons/stats-life/stats-life.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { GameOptionsComponent } from './components/main/game-options/game-option
     IconOrcComponent,
     FightDebriefComponent,
     GameOptionsComponent,
+    StatsLifeComponent,
   ],
   imports: [
     BrowserModule,
