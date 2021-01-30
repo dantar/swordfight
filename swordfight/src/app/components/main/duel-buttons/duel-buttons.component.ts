@@ -80,7 +80,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       { name: 'swingC', rotate: 90, color: '#00ffff', sound: 'block3' },
       { name: 'swingD', rotate: 0, color: '#ff00ff', sound: 'block4' },
     ];
-    this.audio.setTheme('battle1');
+    this.audio.setTheme('battle-01');
     this.newGame(0);
   }
 
@@ -294,6 +294,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   backToMenu() {
     this.shared.dropEnemy();
+    this.audio.setTheme('theme-01');
   }
 
   playAgain() {

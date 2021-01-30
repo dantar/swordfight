@@ -29,6 +29,7 @@ export class LandingPageComponent implements OnInit {
   clickEnemy(enemy: EnemyFighterStats) {
     if (!enemy.locked) {
       this.shared.fightEnemy(enemy);
+      this.audio.setTheme('battle-01');
     }
   }
 

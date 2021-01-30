@@ -36,10 +36,12 @@ export class GameOptionsComponent implements OnInit {
     let showLastSwingButtons = this.shared.showAllSwingButtons === this.shared.showLastSwingButtons;
     this.shared.showAllSwingButtons = showAllSwingButtons;
     this.shared.showLastSwingButtons = showLastSwingButtons;
+    this.shared.saveGame();
   }
 
   clickEnemySwingDelay() {
     this.shared.enemySwingDelay = Math.max(400, (this.shared.enemySwingDelay + 200) % 1001);
+    this.shared.saveGame();
   }
 
 }
