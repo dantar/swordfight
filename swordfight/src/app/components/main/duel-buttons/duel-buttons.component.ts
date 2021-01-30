@@ -96,6 +96,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   enemyAttacks() {
+    this.assignSwingSpeedBonus();
     this.enemyState = this.sequence[this.step];
     this.scoreStartCountDown();
     this.swordState = 'rest';
@@ -107,11 +108,17 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.lastPicked = this.games.randomPick(this.buttons.filter(b => this.lastPicked ? b.name != this.lastPicked : true)).name;
       this.sequence.push(this.lastPicked);
     }
+    this.assignSwingSpeedBonus();
     this.enemyState = this.sequence[this.step];
+  }
+
+  assignSwingSpeedBonus() {
+    this.shared.enemySwingBonus = this.step === this.sequence.length -1 ? 300: 0;
   }
 
   sameLevel() {
     this.step = 0;
+    this.assignSwingSpeedBonus();
     this.enemyState = this.sequence[this.step];
   }
 

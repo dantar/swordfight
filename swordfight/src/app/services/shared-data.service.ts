@@ -12,6 +12,7 @@ export class SharedDataService {
   enemyDefeatScore: number;
   enemyMaxSequenceLength: number;
   enemySwingDelay: number;
+  enemySwingBonus: number;
 
   enemies: EnemyFighterStats[];
   enemy: EnemyFighterStats;
@@ -23,7 +24,8 @@ export class SharedDataService {
     this.swingStepScore = 2;
     this.enemyDefeatScore = null;
     this.enemyMaxSequenceLength = 1;
-    this.enemySwingDelay = 600;
+    this.enemySwingDelay = 500;
+    this.enemySwingBonus = 0;
     this.enemies = [];
     for (let index = 1; index <= 12; index++) {
       this.enemies.push(

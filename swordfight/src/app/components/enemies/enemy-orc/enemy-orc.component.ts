@@ -100,7 +100,7 @@ export class EnemyOrcComponent implements OnInit {
   }
 
   enemyStateWithParameters() {
-    return {value: this.enemyState, params: {delay: this.shared.enemySwingDelay, swordSwingScale: 1.2}}
+    return {value: this.enemyState, params: {delay: this.shared.enemySwingDelay + this.shared.enemySwingBonus, swordSwingScale: 1.2}}
   }
 
 }
