@@ -25,7 +25,7 @@ export class SharedDataService {
     // options
     this.showAllSwingButtons = true;
     this.showLastSwingButtons = true;
-    this.enemySwingDelay = 500; // fast
+    this.enemySwingDelay = 600;
     this.enemySwingBonus = 0;
     this.enemies = [];
     for (let index = 1; index <= 12; index++) {

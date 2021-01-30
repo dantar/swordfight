@@ -1,6 +1,6 @@
 <div class="fullpage" style="font-size: 2em; color: white;" >
-    <div class="button" (click)="shared.showAllSwingButtons = !shared.showAllSwingButtons">Tutti: {{shared.showAllSwingButtons}}</div>
-    <div class="button" (click)="shared.showLastSwingButtons = !shared.showLastSwingButtons">Ultimo: {{shared.showLastSwingButtons}}</div>
+    <div class="button" (click)="clickEnemySwingHints()">Mostra i colpi: {{shared.showAllSwingButtons}}/{{shared.showLastSwingButtons}}</div>
+    <div class="button" (click)="clickEnemySwingDelay()">Tempo: {{shared.enemySwingDelay}}</div>
     <div style="height: 140px;"></div>
 </div>
 
