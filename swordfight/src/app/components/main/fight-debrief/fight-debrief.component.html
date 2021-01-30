@@ -1,13 +1,13 @@
 <svg class="fullsvg" viewBox="0 0 200 200">
     <g transform="translate(50 50)">
-        <g id="play-again" (click)="playAgain.emit()">
+        <g id="play-again" (click)="playAgain.emit()" [@enterBottom]>
             <circle r="21.86342" cy="77.494934" cx="49.671318" id="circle1020"
                 style="opacity:1;vector-effect:none;fill:#aa8800;fill-opacity:1;stroke:#784421;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
             <path style="fill:#ffff00;stroke-width:0.05899125;stroke:#ffff00"
                 d="m 48.663493,90.061682 c -1.824387,-0.18439 -3.837744,-0.862499 -5.368205,-1.808043 -1.590278,-0.982495 -3.182727,-2.56721 -4.174258,-4.15399 -1.826257,-2.922622 -2.359451,-6.551731 -1.460532,-9.94087 0.559967,-2.111201 1.685838,-4.039809 3.301545,-5.655515 1.100534,-1.100534 2.124774,-1.829112 3.513069,-2.498982 3.433481,-1.656701 7.455612,-1.63588 10.94288,0.05665 2.759599,1.339353 4.890337,3.577401 6.119163,6.427331 0.431133,0.999899 0.797369,2.336162 0.897327,3.274015 0.08217,0.771001 0.01583,0.768017 0.772733,0.03474 0.373767,-0.362077 0.797044,-0.713512 0.957023,-0.794583 1.138316,-0.576825 2.486982,-0.101216 3.041075,1.072427 0.165441,0.350435 0.186199,0.452188 0.182936,0.89671 -0.0026,0.375198 -0.03792,0.590531 -0.139671,0.855376 -0.127748,0.332499 -0.306248,0.524843 -2.945239,3.17374 -3.268935,3.281204 -3.16045,3.197319 -4.135164,3.197319 -0.512773,0 -0.597842,-0.017 -0.974743,-0.19462 -0.385845,-0.181849 -0.593334,-0.375366 -3.162456,-2.949562 -3.099023,-3.10514 -3.058694,-3.054388 -3.108347,-3.912104 -0.04384,-0.757193 0.163882,-1.288842 0.699176,-1.78955 0.502507,-0.470034 1.172023,-0.674461 1.848399,-0.564374 0.58821,0.09572 0.832106,0.256437 1.739344,1.146062 l 0.847696,0.831243 -0.04,-0.383438 C 57.898327,75.241713 57.363614,73.860769 56.62533,72.786896 54.465093,69.644704 50.418633,68.421 46.845585,69.82936 c -1.757794,0.692858 -3.416678,2.227078 -4.295982,3.973143 -0.251707,0.499826 -0.567757,1.436949 -0.710674,2.107228 -0.150117,0.704041 -0.150117,2.363504 0,3.067544 0.142917,0.67028 0.458967,1.607405 0.710674,2.107233 0.919147,1.825177 2.651786,3.382546 4.502959,4.04745 0.879402,0.315859 1.438552,0.425227 2.607775,0.510051 0.681055,0.0494 0.841808,0.0814 1.16217,0.23132 1.72283,0.806207 1.716447,3.220035 -0.0107,4.028247 -0.333139,0.155893 -0.460144,0.181394 -0.985195,0.197841 -0.331515,0.01031 -0.854942,-0.0066 -1.163172,-0.03779 z"
                 id="path1035" />
         </g>
-        <g id="play-next" *ngIf="enableNext" (click)="playNext.emit()">
+        <g id="play-next" *ngIf="enableNext" (click)="playNext.emit()" [@enterRight]>
             <circle
                 style="opacity:1;vector-effect:none;fill:#aa8800;fill-opacity:1;stroke:#784421;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
                 id="path1018" cx="72.212685" cy="28.257614" r="26.721958" />
@@ -15,7 +15,7 @@
                 style="fill:#ffff00;stroke:#ffff00;stroke-width:5.10841465;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
                 d="M 67.222196,43.730342 62.11378,13.809628 86.561193,27.310438 Z" id="path1038" />
         </g>
-        <g id="back-to-menu" (click)="backToMenu.emit()">
+        <g id="back-to-menu" (click)="backToMenu.emit()" [@enterLeft]>
             <circle
                 style="opacity:1;vector-effect:none;fill:#aa8800;fill-opacity:1;stroke:#784421;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
                 id="circle1022" cx="17.5" cy="42.5" r="17.004883" />
