@@ -18,6 +18,9 @@ import { IconOrcComponent } from './components/buttons/icon-orc/icon-orc.compone
 import { FightDebriefComponent } from './components/main/fight-debrief/fight-debrief.component';
 import { GameOptionsComponent } from './components/main/game-options/game-options.component';
 import { StatsLifeComponent } from './components/buttons/stats-life/stats-life.component';
+import { OptionsCogComponent } from './components/buttons/options-cog/options-cog.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -35,11 +38,13 @@ import { StatsLifeComponent } from './components/buttons/stats-life/stats-life.c
     FightDebriefComponent,
     GameOptionsComponent,
     StatsLifeComponent,
+    OptionsCogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},

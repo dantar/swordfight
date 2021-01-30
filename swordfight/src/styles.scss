@@ -5,4 +5,8 @@
     margin: 3px;
     border: 1px solid gray;
     padding: 3px;
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: center;
 }

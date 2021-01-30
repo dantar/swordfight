@@ -1,6 +1,30 @@
-<div class="fullpage" style="font-size: 2em; color: white;" >
-    <div class="button" (click)="clickEnemySwingHints()">Mostra i colpi: {{shared.showAllSwingButtons}}/{{shared.showLastSwingButtons}}</div>
-    <div class="button" (click)="clickEnemySwingDelay()">Tempo: {{shared.enemySwingDelay}}</div>
+<div class="fullpage" style="font-size: 2em; color: white;">
+    <div class="button" (click)="clickEnemySwingHints()">
+        <svg viewBox="0 0 100 100" height="40" *ngFor="let swing of allSwings()" style="opacity: {{swing? 1: 0.3}}">
+            <g transform="translate(50 50) scale(0.5) rotate(180)" app-boxed-sword color="#ffff00"></g>
+            <g transform="translate(50 50) scale(0.5) rotate(-90)" app-boxed-sword color="#00ff00"></g>
+            <g transform="translate(50 50) scale(0.5) rotate(90)" app-boxed-sword color="#00ffff"></g>
+            <g transform="translate(50 50) scale(0.5) rotate(0)" app-boxed-sword color="#ff00ff"></g>
+            <circle cx="50" cy="50" r="18" style="fill:#ff0000;fill-opacity:1;"></circle>
+        </svg>
+    </div>
+    <div class="button" (click)="clickEnemySwingDelay()">
+        <svg viewBox="0 0 100 100" height="40" *ngFor="let speed of allSpeeds()" style="opacity: {{speed.shown ? 1: 0.3}}">
+            <path id="path5640"
+                d="M 4.4511719 0.71679688 A 5.0005 5.0005 0 0 0 -0.1640625 7.9941406 L 20.730469 48.753906 L 8.3984375 92.941406 A 5.0005 5.0005 0 0 0 13.488281 99.277344 L 85.273438 95.349609 A 5.0005 5.0005 0 0 0 89.882812 91.429688 L 99.527344 47.5 A 5.0005 5.0005 0 0 0 99.296875 44.601562 L 84.296875 6.3867188 A 5.0005 5.0005 0 0 0 79.808594 3.2167969 L 4.4511719 0.71679688 z "
+                style="fill:{{speed.fill}};stroke:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+            <path
+                style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.33333334;stroke-miterlimit:4;stroke-dasharray:none"
+                d="m 4.2857143,5.7142857 75.3571427,2.5 15,38.2142853 L 85,90.357143 13.214286,94.285714 26.071429,48.214286 Z"
+                id="path5627" />
+            <path
+                style="fill:#000000;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.33333334"
+                d="M 48.39947,53.942949 50.576799,22.358852 68.33055,27.855438 53.574073,55.329479 Z" id="path5629" />
+            <circle transform="rotate(15)"
+                style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:0.33333334;stroke:none;stroke-width:5.71428585;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+                id="path5631" cx="63.926048" cy="50.471043" r="6.9642859" />
+
+        </svg>
+    </div>
     <div style="height: 140px;"></div>
 </div>
-

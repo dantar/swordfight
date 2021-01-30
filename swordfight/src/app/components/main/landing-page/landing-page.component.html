@@ -11,7 +11,9 @@
 
 <div class="panel-menu-list top-left-menu">
     <div class="panel-menu-item" *ngIf="!shared.enemy">
-        <span style="font-size: 1.5em; color: white;" (click)="clickOptions()">Options</span>
+        <svg viewBox="0 0 100 100" (click)="clickOptions()">
+            <g app-options-cog></g>
+        </svg>
     </div>
 </div>
 
