@@ -178,7 +178,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.scoreStartCountDown();
     }
     if (event.toState === this.enemyState && this.enemyState.startsWith('swing') && this.enemyState != this.swordState) {
-      this.audio.play('grunt1');
+      this.audio.play(this.swords.sound('grunt'));
       this.hitsStartCountUp(50);
     }
   }

@@ -30,5 +30,6 @@ SwordsService.register({
   missed:['assets/broadsword/missed1.ogg'],
   fatal: ['assets/broadsword/fatal1.ogg', 'assets/broadsword/fatal2.ogg'],
   sheat: ['assets/broadsword/sheat.ogg'],
+  grunt: ['assets/broadsword/grunt1.ogg'],
 
 });

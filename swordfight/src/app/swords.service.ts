@@ -31,7 +31,7 @@ export class SwordsService {
     this.items = {};
     SwordsService._items.forEach(item => this.items[item.name] = item);
     SwordsService._items.forEach(item => {
-      ['ready', 'loop', 'swingA', 'swingB', 'swingC', 'swingD', 'missed', 'fatal', 'sheat'].forEach(part => {
+      ['ready', 'loop', 'swingA', 'swingB', 'swingC', 'swingD', 'missed', 'fatal', 'sheat', 'grunt'].forEach(part => {
         let options: string[] = item[part];
         for (let index = 0; index < options.length; index++) {
           this.audio.register(`${item.name}-${part}-${index}`, options[index]);
@@ -57,5 +57,6 @@ export class SwordsItem {
   missed:string[];
   fatal: string[];
   sheat: string[];
+  grunt: string[];
 
 }
