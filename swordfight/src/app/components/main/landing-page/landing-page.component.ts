@@ -13,6 +13,7 @@ import { SwordsItem, SwordsService } from 'src/app/swords.service';
 export class LandingPageComponent implements OnInit {
 
   sword: SwordsItem;
+  showOptions: boolean;
 
   constructor(
     public shared: SharedDataService,
@@ -21,6 +22,7 @@ export class LandingPageComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.showOptions = false;
     this.audio.setTheme('theme-01');
   }
 
@@ -28,6 +30,10 @@ export class LandingPageComponent implements OnInit {
     if (!enemy.locked) {
       this.shared.fightEnemy(enemy);
     }
+  }
+
+  clickOptions() {
+    this.showOptions = !this.showOptions;
   }
 
   transformEnemy(enemy: EnemyFighterStats): string {

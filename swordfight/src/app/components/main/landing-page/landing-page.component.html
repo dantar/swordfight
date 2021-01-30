@@ -1,16 +1,4 @@
-<div *ngIf="false" class="fullpage" style="font-size: 2em; color: white;" >
-    <div class="button" *ngFor="let enemy of shared.enemies" (click)="clickEnemy(enemy)">
-        <svg viewBox="0 0 100 100" width="50px" height="50px">
-            <g *ngIf="!enemy.locked" app-icon-orc></g>
-            <g *ngIf="enemy.locked" app-icon-locked></g>
-        </svg>
-    </div>
-    <div class="button" (click)="shared.showAllSwingButtons = !shared.showAllSwingButtons">Tutti: {{shared.showAllSwingButtons}}</div>
-    <div class="button" (click)="shared.showLastSwingButtons = !shared.showLastSwingButtons">Ultimo: {{shared.showLastSwingButtons}}</div>
-    <div style="height: 140px;"></div>
-</div>
-
-<svg *ngIf="!shared.enemy" class="fullsvg" viewBox="0 0 400 400">
+<svg *ngIf="!shared.enemy && !showOptions" class="fullsvg" viewBox="0 0 400 400">
     <g *ngFor="let enemy of shared.enemies" (click)="clickEnemy(enemy)" [attr.transform]="transformEnemy(enemy)">
         <g *ngIf="!enemy.locked" app-icon-orc></g>
         <g *ngIf="enemy.locked" app-icon-locked></g>
@@ -18,3 +6,12 @@
 </svg>
 
 <app-duel-buttons *ngIf="shared.enemy"></app-duel-buttons>
+
+<app-game-options *ngIf="showOptions"></app-game-options>
+
+<div class="panel-menu-list top-left-menu">
+    <div class="panel-menu-item" *ngIf="!shared.enemy">
+        <span style="font-size: 1.5em; color: white;" (click)="clickOptions()">Options</span>
+    </div>
+</div>
+

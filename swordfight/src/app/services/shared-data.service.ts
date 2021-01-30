@@ -18,13 +18,14 @@ export class SharedDataService {
   enemy: EnemyFighterStats;
 
   constructor() {
-    this.showAllSwingButtons = true;
-    this.showLastSwingButtons = true;
     this.swingSpeedScore = 5;
     this.swingStepScore = 2;
     this.enemyDefeatScore = null;
     this.enemyMaxSequenceLength = 1;
-    this.enemySwingDelay = 500;
+    // options
+    this.showAllSwingButtons = true;
+    this.showLastSwingButtons = true;
+    this.enemySwingDelay = 500; // fast
     this.enemySwingBonus = 0;
     this.enemies = [];
     for (let index = 1; index <= 12; index++) {
