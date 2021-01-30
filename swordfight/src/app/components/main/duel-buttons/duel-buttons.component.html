@@ -26,12 +26,12 @@
     <g *ngIf="swordState!='dead'" [@thesword]="swordState" (@thesword.done)="swordDone($event)" app-broadsword
         color="#00ff00"></g>
     <g *ngIf="ready && swordState!='dead'">
-        <g *ngFor="let button of buttons" style="opacity:0;" [attr.transform]="transform(button)"
+        <g *ngFor="let button of buttons" style="opacity:{{showButton(button) ? 0.1 : 0}};" [attr.transform]="transform(button)"
             (click)="clickAction(button)">
             <rect x="0" y="0" width="100" height="100" style="fill: {{button.color}};" />
         </g>
     </g>
-    <g *ngIf="showFatal()" (click)="clickWin()" [attr.transform]="transformFatal()" style="opacity:0;">
+    <g *ngIf="showFatal()" (click)="clickWin()" [attr.transform]="transformFatal()" style="opacity:0.1;">
         <g app-strike-fatal></g>
     </g>
 </svg>
