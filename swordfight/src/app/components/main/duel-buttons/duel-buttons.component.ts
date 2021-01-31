@@ -143,7 +143,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   clickAction(button: ActionButton) {
-    this.audio.play('action');
     if (this.enemyState === 'rest') {
       this.tickers.stop('rest');
       this.levelUp();
