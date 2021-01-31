@@ -48,8 +48,6 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
 })
 export class DuelButtonsComponent implements OnInit, OnDestroy {
 
-  ready: boolean;
-  currentAction: ActionButton;
   buttons: ActionButton[]
   sequence: string[];
   step: number;
@@ -140,17 +138,16 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   showFatal(): boolean {
-    return (this.enemyState === 'fatal') || (this.ready && this.isLastStep());
+    return (this.enemyState === 'fatal') || (this.isLastStep());
   }
 
   clickAction(button: ActionButton) {
-    this.currentAction = button;
-    if (this.swordState == this.currentAction.name) {
-      console.log('canceld action!');
-      this.swordState = 'rest';
-    } else {
-      this.swordState = this.currentAction.name;
+    if (this.enemyState === 'rest') {
+      this.tickers.stop('rest');
+      this.levelUp();
+      this.scoreStartCountDown();
     }
+    this.swordState = button.name;
   }
 
   swordDone(event: any) {
@@ -166,14 +163,12 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     }
     if (event.toState === 'rest' && this.enemyState === 'rest' && this.swordState != 'dead') {
       this.tickers.once('rest', 800, () => {
-        this.ready = true;
         this.levelUp();
         this.scoreStartCountDown();
       });
     }
     if (event.toState === 'fatal' && this.enemyState === 'fatal' && this.swordState != 'dead') {
       this.totalScore = 0;
-      this.ready = true;
       this.levelUp();
       this.scoreStartCountDown();
     }
@@ -214,12 +209,12 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   checkSwing() {
-    if (this.swordState === this.sequence[this.step]) {
+    if (this.swordState === this.enemyState) {
       this.tickers.stop('hits');
       this.tickers.stop('score');
       this.totalScore = this.totalScore + this.score + this.shared.swingStepScore;
       this.score = this.shared.swingSpeedScore;
-      this.audio.play(this.swords.sound(this.currentAction.name));
+      this.audio.play(this.swords.sound(this.swordState));
       this.step++;
       if ((this.shared.enemyDefeatScore != null && this.totalScore > this.shared.enemyDefeatScore)
       || (this.shared.enemyMaxSequenceLength != null && this.step >= this.sequence.length && this.sequence.length >= this.shared.enemyMaxSequenceLength)
@@ -246,7 +241,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   enemyIsDefeated() {
     this.swordState = 'rest';
     this.enemyState = 'fatal';
-    this.ready = false;
     this.tickers.stop('rest');
     this.tickers.stop('hits');
   }
@@ -254,7 +248,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   finishedSequence() {
     this.swordState = 'rest';
     this.enemyState = 'rest';
-    this.ready = false;
     this.tickers.stop('rest');
     this.tickers.stop('hits');
   }
@@ -264,7 +257,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.play(this.swords.sound('sheat'));
     this.tickers.stop('rest');
     this.tickers.stop('hits');
-    this.ready = false;
     this.enemyState = 'dead';
     this.swordState = 'won';
     this.shared.unlockNext();
@@ -275,7 +267,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.audio.play(this.swords.sound('sheat'));
     this.tickers.stop('rest');
     this.tickers.stop('hits');
-    this.ready = false;
     this.enemyState = 'won';
     this.swordState = 'dead';
   }
