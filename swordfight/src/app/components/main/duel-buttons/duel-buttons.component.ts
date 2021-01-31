@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
 import { GamesCommonService } from 'src/app/services/games-common.service';
@@ -65,6 +65,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     private tickers: TickersService,
     private swords: SwordsService,
     private shared: SharedDataService,
+    private changes: ChangeDetectorRef,
   ) { }
 
   ngOnDestroy(): void {
@@ -155,6 +156,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.checkAction();
       this.swordState = 'rest';
     }
+    this.changes.detectChanges();
   }
 
   enemyDone(event: any) {
@@ -176,6 +178,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.audio.play(this.swords.sound('grunt'));
       this.hitsStartCountUp(50);
     }
+    this.changes.detectChanges();
   }
 
   checkAction() {
