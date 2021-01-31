@@ -143,6 +143,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   }
 
   clickAction(button: ActionButton) {
+    this.audio.play('action');
     if (this.enemyState === 'rest') {
       this.tickers.stop('rest');
       this.levelUp();
@@ -167,6 +168,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.tickers.once('rest', 800, () => {
         this.levelUp();
         this.scoreStartCountDown();
+        this.changes.detectChanges();
       });
     }
     if (event.toState === 'fatal' && this.enemyState === 'fatal' && this.swordState != 'dead') {
@@ -201,6 +203,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
       this.hits --;
       if (this.hits < 0) {
         this.loseMatch();
+        this.changes.detectChanges();
       }
     });
   }
@@ -208,6 +211,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   scoreStartCountDown() {
     this.tickers.loop('score', 200, () => {
       this.score = Math.max(0, this.score - 1);
+      this.changes.detectChanges();
     });
   }
 
