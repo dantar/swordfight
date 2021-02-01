@@ -9,16 +9,27 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
 })
 export class WorldMapComponent implements OnInit {
 
+  orc: WorldOrc;
+
   constructor(public shared: SharedDataService) { }
 
   ngOnInit(): void {
   }
 
   clickOrc(orc: WorldOrc) {
+    this.orc = orc;
     this.shared.fightEnemy({
       maxSequenceLength: orc.swings,
       locked: false,
     });
+  }
+
+  youWin(won: boolean) {
+    if (won) {
+      this.shared.dropEnemy();
+      this.shared.world.orcs.splice(this.shared.world.orcs.indexOf(this.orc), 1);
+      this.shared.saveGame();
+    }
   }
 
 }

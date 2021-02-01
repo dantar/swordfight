@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WorldMapComponent } from '../components/main/world-map/world-map.component';
-import { WorldMapStats } from '../models/game-model';
+import { WorldEvent, WorldMapStats, WorldOrc } from '../models/game-model';
+import { GamesCommonService } from './games-common.service';
 
 @Injectable({
   providedIn: 'root'
@@ -54,13 +55,12 @@ export class SharedDataService {
   }
 
   saveGame() {
-    this.savedGame = {
-      version: '1.0',
-      showAllSwingButtons: this.showAllSwingButtons,
-      showLastSwingButtons: this.showLastSwingButtons,
-      enemySwingDelay: this.enemySwingDelay,
-      progress: this.enemies.filter(e => !e.locked).length,
-    };
+    this.savedGame.version = '1.0';
+    this.savedGame.showAllSwingButtons = this.showAllSwingButtons;
+    this.savedGame.showLastSwingButtons = this.showLastSwingButtons;
+    this.savedGame.enemySwingDelay = this.enemySwingDelay;
+    if (this.enemies) this.savedGame.progress = this.enemies.filter(e => !e.locked).length;
+    if (this.world) this.savedGame.world = this.world;
     localStorage.setItem('swordfight-saved', JSON.stringify(this.savedGame));
   }
 
@@ -101,12 +101,36 @@ export class SharedDataService {
   }
   switchToWorldMap() {
     this.enemies = null;
-    this.world = {
-      orcs: [
-        {swings: 3, x: 10, y: 20},
-      ],
-      updated: new Date().getTime(),
-    };
+    if (this.savedGame.world) {
+      this.world = this.savedGame.world;
+    } else {
+      this.world = {
+        orcs: [],
+        updated: new Date().getTime(),
+        events: [],
+      }
+      this.pushOneWorldEvent();
+    }
+    this.advanceTime();
+    this.saveGame();
+  }
+
+  advanceTime() {
+    let now = new Date().getTime();
+    while (now >= this.world.events[0].timestamp) {
+      let first:WorldEvent = this.world.events.splice(0, 1)[0];
+      WorldEvent.trigger(first, this);
+      this.pushOneWorldEvent();
+    }
+  }
+
+  pushOneWorldEvent() {
+    let latest = this.world.events.length > 0 ? this.world.events[this.world.events.length -1].timestamp : new Date().getTime();
+    latest = latest + 1000 * 60 * 60 * (4 + GamesCommonService.randomInt(0, 8));
+    this.world.events.push({
+      code: 'orc',
+      timestamp: latest,
+    });
   }
 
 }
@@ -124,4 +148,5 @@ class SavedGame {
   showLastSwingButtons: boolean;
   enemySwingDelay: number;
   progress: number;
+  world?: WorldMapStats;
 }

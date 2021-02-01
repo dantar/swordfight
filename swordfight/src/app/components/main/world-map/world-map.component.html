@@ -1,6 +1,6 @@
 <div *ngIf="!shared.enemy" class="fullpage" style="font-size: 2em; color: white;">
     <div class="button">
-        {{shared.world.updated}}
+        {{shared.world.updated | date: 'yyyy-MM-dd HH:mm:ss'}}
     </div>
     <div class="button" *ngFor="let orc of shared.world.orcs" (click)="clickOrc(orc)">
         Orc ({{orc.x}}-{{orc.y}}) {{orc.swings}}
@@ -8,4 +8,4 @@
     <div style="height: 140px;"></div>
 </div>
 
-<app-duel-buttons *ngIf="shared.enemy" (youWin)="shared.dropEnemy()"></app-duel-buttons>
+<app-duel-buttons *ngIf="shared.enemy" (youWin)="youWin($event)"></app-duel-buttons>
