@@ -9,3 +9,18 @@ export class ActionButton {
     color: string;
     sound: string;
 }
+
+export class WorldMapStats {
+
+    orcs: WorldOrc[];
+    updated: number;
+
+}
+
+export class WorldOrc {
+
+    x: number;
+    y: number;
+    swings: number;
+
+}

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActionButton } from 'src/app/models/game-model';
 import { AudioPlayService } from 'src/app/services/audio-play.service';
 import { GamesCommonService } from 'src/app/services/games-common.service';
@@ -47,6 +47,8 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
   ],
 })
 export class DuelButtonsComponent implements OnInit, OnDestroy {
+
+  @Output() youWin = new EventEmitter<boolean>();
 
   buttons: ActionButton[]
   sequence: string[];
@@ -265,7 +267,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.tickers.stop('hits');
     this.enemyState = 'dead';
     this.swordState = 'won';
-    this.shared.unlockNext();
+    this.youWin.emit(true);
   }
 
   loseMatch() {
@@ -275,6 +277,7 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.tickers.stop('hits');
     this.enemyState = 'won';
     this.swordState = 'dead';
+    this.youWin.emit(false);
   }
 
   clickWin() {
@@ -287,20 +290,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   transformFatal() {
     return `translate(50 50) scale(${this.scaleFatal()}) translate(-50 -50)`;
-  }
-
-  backToMenu() {
-    this.shared.dropEnemy();
-    this.audio.setTheme('theme-01');
-  }
-
-  playAgain() {
-    this.newGame(0);
-  }
-
-  playNext() {
-    this.shared.fightNext();
-    this.newGame(0);
   }
 
 }

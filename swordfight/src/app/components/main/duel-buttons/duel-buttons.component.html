@@ -41,9 +41,3 @@
         <svg viewBox="0 0 100 100"><g app-stats-life [value]="hits / 20"></g></svg>
     </div>
 </div>
-
-<app-fight-debrief *ngIf="swordState === 'dead' || enemyState === 'dead'" 
-    [enableNext]="enemyState === 'dead'" 
-    (backToMenu)="backToMenu()" 
-    (playNext)="playNext()" 
-    (playAgain)="playAgain()"></app-fight-debrief>

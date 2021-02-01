@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { WorldMapComponent } from '../components/main/world-map/world-map.component';
+import { WorldMapStats } from '../models/game-model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedDataService {
+
   theme: string;
   showAllSwingButtons: boolean;
   showLastSwingButtons: boolean;
@@ -16,21 +19,18 @@ export class SharedDataService {
 
   enemies: EnemyFighterStats[];
   enemy: EnemyFighterStats;
+  world: WorldMapStats;
 
   savedGame: SavedGame;
+  showMenu: boolean;
 
   constructor() {
+    this.showMenu = false;
     this.swingSpeedScore = 5;
     this.swingStepScore = 2;
     this.enemyDefeatScore = null;
     this.enemyMaxSequenceLength = 1;
     // options
-    this.enemies = [];
-    for (let index = 1; index <= 12; index++) {
-      this.enemies.push(
-        {maxSequenceLength: index, locked: index != 1}
-      );
-    }
     //
     let saved = localStorage.getItem('swordfight-saved');
     if (saved) {
@@ -42,6 +42,7 @@ export class SharedDataService {
       this.enemySwingDelay = 800;
       this.saveGame();
     }
+    this.switchToTraining();
     this.enemy = null;
     this.enemySwingBonus = 0;
   }
@@ -50,9 +51,6 @@ export class SharedDataService {
     this.showAllSwingButtons = this.savedGame.showAllSwingButtons;
     this.showLastSwingButtons = this.savedGame.showLastSwingButtons;
     this.enemySwingDelay = this.savedGame.enemySwingDelay;
-    for (let index = 0; index < this.savedGame.progress; index++) {
-      this.enemies[index].locked = false;
-    }
   }
 
   saveGame() {
@@ -87,6 +85,28 @@ export class SharedDataService {
   fightEnemy(enemy: EnemyFighterStats) {
     this.enemy = enemy;
     this._setupstats();
+  }
+
+  switchToTraining() {
+    this.world = null;
+    this.enemies = [];
+    for (let index = 1; index <= 12; index++) {
+      this.enemies.push(
+        {maxSequenceLength: index, locked: index != 1}
+      );
+    }
+    for (let index = 0; index < this.savedGame.progress; index++) {
+      this.enemies[index].locked = false;
+    }
+  }
+  switchToWorldMap() {
+    this.enemies = null;
+    this.world = {
+      orcs: [
+        {swings: 3, x: 10, y: 20},
+      ],
+      updated: new Date().getTime(),
+    };
   }
 
 }

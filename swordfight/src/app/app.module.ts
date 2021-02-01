@@ -21,6 +21,10 @@ import { StatsLifeComponent } from './components/buttons/stats-life/stats-life.c
 import { OptionsCogComponent } from './components/buttons/options-cog/options-cog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { WorldMapComponent } from './components/main/world-map/world-map.component';
+import { FullpageMenuComponent } from './components/main/fullpage-menu/fullpage-menu.component';
+import { OrcTrainingComponent } from './components/main/orc-training/orc-training.component';
+import { MenuToggleComponent } from './components/buttons/menu-toggle/menu-toggle.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +43,10 @@ import { environment } from '../environments/environment';
     GameOptionsComponent,
     StatsLifeComponent,
     OptionsCogComponent,
+    WorldMapComponent,
+    FullpageMenuComponent,
+    OrcTrainingComponent,
+    MenuToggleComponent,
   ],
   imports: [
     BrowserModule,

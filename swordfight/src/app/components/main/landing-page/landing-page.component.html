@@ -1,12 +1,8 @@
-<svg *ngIf="!shared.enemy && !showOptions" class="fullsvg" viewBox="0 0 400 400">
-    <g *ngFor="let enemy of shared.enemies" (click)="clickEnemy(enemy)" [attr.transform]="transformEnemy(enemy)">
-        <g *ngIf="!enemy.locked" app-icon-orc></g>
-        <g *ngIf="enemy.locked" app-icon-locked></g>
-    </g>
-</svg>
 
-<app-duel-buttons *ngIf="shared.enemy"></app-duel-buttons>
+<app-orc-training *ngIf="shared.enemies"></app-orc-training>
+<app-world-map *ngIf="shared.world"></app-world-map>
 
+<app-fullpage-menu *ngIf="shared.showMenu"></app-fullpage-menu>
 <app-game-options *ngIf="showOptions"></app-game-options>
 
 <div class="panel-menu-list top-left-menu">

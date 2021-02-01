@@ -26,22 +26,8 @@ export class LandingPageComponent implements OnInit {
     this.audio.setTheme('theme-01');
   }
 
-  clickEnemy(enemy: EnemyFighterStats) {
-    if (!enemy.locked) {
-      this.shared.fightEnemy(enemy);
-      this.audio.setTheme('battle-01');
-    }
-  }
-
   clickOptions() {
     this.showOptions = !this.showOptions;
-  }
-
-  transformEnemy(enemy: EnemyFighterStats): string {
-    let index = this.shared.enemies.indexOf(enemy);
-    let x = index % 4;
-    let y = (index - x) /4;
-    return `translate(${100 * x} ${100 * y})`;
   }
 
 }

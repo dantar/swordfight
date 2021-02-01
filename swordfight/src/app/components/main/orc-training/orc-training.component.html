@@ -1,0 +1,14 @@
+<svg *ngIf="!shared.enemy" class="fullsvg" viewBox="0 0 400 400">
+    <g *ngFor="let enemy of shared.enemies" (click)="clickEnemy(enemy)" [attr.transform]="transformEnemy(enemy)">
+        <g *ngIf="!enemy.locked" app-icon-orc></g>
+        <g *ngIf="enemy.locked" app-icon-locked></g>
+    </g>
+</svg>
+
+<app-duel-buttons *ngIf="shared.enemy" (youWin)="youWin($event)"></app-duel-buttons>
+
+<app-fight-debrief #duelbuttons *ngIf="shared.enemy && fightWon != null" 
+    [enableNext]="fightWon" 
+    (backToMenu)="backToMenu()" 
+    (playNext)="playNext()" 
+    (playAgain)="playAgain()"></app-fight-debrief>

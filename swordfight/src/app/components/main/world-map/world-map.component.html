@@ -1,0 +1,11 @@
+<div *ngIf="!shared.enemy" class="fullpage" style="font-size: 2em; color: white;">
+    <div class="button">
+        {{shared.world.updated}}
+    </div>
+    <div class="button" *ngFor="let orc of shared.world.orcs" (click)="clickOrc(orc)">
+        Orc ({{orc.x}}-{{orc.y}}) {{orc.swings}}
+    </div>
+    <div style="height: 140px;"></div>
+</div>
+
+<app-duel-buttons *ngIf="shared.enemy" (youWin)="shared.dropEnemy()"></app-duel-buttons>
