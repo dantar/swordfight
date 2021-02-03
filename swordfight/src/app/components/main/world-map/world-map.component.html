@@ -8,4 +8,14 @@
     <div style="height: 140px;"></div>
 </div>
 
-<app-duel-buttons *ngIf="shared.enemy" (youWin)="youWin($event)"></app-duel-buttons>
+<app-duel-buttons *ngIf="shared.enemy" (youWin)="fightWon = $event"></app-duel-buttons>
+
+<div class="fullpage" *ngIf="fightWon != null">
+    <div *ngIf="fightWon" class="button" (click)="clickAckWin()">
+        Hai sconfitto l'orco!
+    </div>
+    <div *ngIf="!fightWon" class="button" (click)="clickAckLose()">
+        L'orco continua le sue scorrerie!
+    </div>
+    <div style="height: 140px;"></div>
+</div>

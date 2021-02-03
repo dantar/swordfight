@@ -102,8 +102,11 @@ export class SharedDataService {
   switchToWorldMap() {
     this.enemies = null;
     if (this.savedGame.world) {
+      console.log('world loaded from savegame', this.savedGame.world);
       this.world = this.savedGame.world;
+      if (this.world.events.length === 0) this.pushOneWorldEvent();
     } else {
+      console.log('new world');
       this.world = {
         orcs: [],
         updated: new Date().getTime(),
@@ -111,22 +114,29 @@ export class SharedDataService {
       }
       this.pushOneWorldEvent();
     }
+    console.log('world ready', this.savedGame.world);
     this.advanceTime();
     this.saveGame();
   }
 
   advanceTime() {
     let now = new Date().getTime();
+    console.log('now and world', now, this.world, now - this.world.events[0].timestamp);
     while (now >= this.world.events[0].timestamp) {
+      this.pushOneWorldEvent();
       let first:WorldEvent = this.world.events.splice(0, 1)[0];
       WorldEvent.trigger(first, this);
-      this.pushOneWorldEvent();
+      console.log('now and world', now, this.world, now - this.world.events[0].timestamp);
     }
   }
 
   pushOneWorldEvent() {
-    let latest = this.world.events.length > 0 ? this.world.events[this.world.events.length -1].timestamp : new Date().getTime();
-    latest = latest + 1000 * 60 * 60 * (4 + GamesCommonService.randomInt(0, 8));
+    let latest = this.world.events[this.world.events.length -1].timestamp;
+    //let latest = this.world.events.length > 0 ? this.world.events[this.world.events.length -1].timestamp : new Date().getTime();
+    let headcount = this.world.orcs.length;
+    let quarters = 4 + headcount * headcount;
+    let delay = 1000 * 60 * 15 * (quarters + GamesCommonService.randomInt(0, quarters));
+    latest = latest + delay;
     this.world.events.push({
       code: 'orc',
       timestamp: latest,

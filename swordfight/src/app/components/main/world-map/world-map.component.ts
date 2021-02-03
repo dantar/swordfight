@@ -10,10 +10,12 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
 export class WorldMapComponent implements OnInit {
 
   orc: WorldOrc;
+  fightWon: boolean;
 
   constructor(public shared: SharedDataService) { }
 
   ngOnInit(): void {
+    this.fightWon = null;
   }
 
   clickOrc(orc: WorldOrc) {
@@ -24,12 +26,17 @@ export class WorldMapComponent implements OnInit {
     });
   }
 
-  youWin(won: boolean) {
-    if (won) {
-      this.shared.dropEnemy();
-      this.shared.world.orcs.splice(this.shared.world.orcs.indexOf(this.orc), 1);
-      this.shared.saveGame();
-    }
+  clickAckWin() {
+    this.fightWon = null;    
+    this.shared.dropEnemy();
+    this.shared.world.orcs.splice(this.shared.world.orcs.indexOf(this.orc), 1);
+    this.shared.saveGame();
+  }
+
+  clickAckLose() {
+    this.fightWon = null;    
+    this.shared.dropEnemy();
+    this.shared.saveGame();
   }
 
 }
