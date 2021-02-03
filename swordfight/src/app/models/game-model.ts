@@ -16,21 +16,31 @@ export class ActionButton {
 export class WorldMapStats {
 
     orcs: WorldOrc[];
-    events: WorldEvent[];
-    updated: number;
+    last: number;
+    next: number;
 
 }
 
 export class WorldEvent {
-    static trigger(first: WorldEvent, shared: SharedDataService) {
-      if (first.code === 'orc') {
-          shared.world.orcs.push({
-              swings: GamesCommonService.randomInt(2, 8),
-              x: GamesCommonService.randomInt(1, 100),
-              y: GamesCommonService.randomInt(1, 100),
-          });
-          shared.world.updated = first.timestamp;
-      }
+    static trigger(we: WorldEvent, shared: SharedDataService) {
+        if (we.code === 'orc') {
+            let orc: WorldOrc = {
+                swings: GamesCommonService.randomInt(1 + shared.world.orcs.length, Math.min(10, 6+shared.world.orcs.length)),
+                x: GamesCommonService.randomInt(1, 100),
+                y: GamesCommonService.randomInt(1, 100),
+            };
+            shared.world.orcs.push(orc);
+            if (shared.world.orcs.length > 8) {
+                let weakest = 0;
+                for (let index = 1; index < shared.world.orcs.length; index++) {
+                    if (shared.world.orcs[index].swings < shared.world.orcs[weakest].swings) {
+                        weakest = index;
+                    }
+                }
+                shared.world.orcs.splice(weakest, 1);
+            }
+            shared.world.last = we.timestamp;
+        }
     }
     timestamp: number;
     code: string;

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { WorldMapComponent } from '../components/main/world-map/world-map.component';
 import { WorldEvent, WorldMapStats, WorldOrc } from '../models/game-model';
 import { GamesCommonService } from './games-common.service';
 
@@ -101,46 +100,43 @@ export class SharedDataService {
   }
   switchToWorldMap() {
     this.enemies = null;
-    if (this.savedGame.world) {
-      console.log('world loaded from savegame', this.savedGame.world);
+    if (this.savedGame.world && this.savedGame.world.last && this.savedGame.world.next && this.savedGame.world.orcs) {
       this.world = this.savedGame.world;
-      if (this.world.events.length === 0) this.pushOneWorldEvent();
     } else {
-      console.log('new world');
       this.world = {
         orcs: [],
-        updated: new Date().getTime(),
-        events: [],
+        last: new Date().getTime(),
+        next: null,
       }
-      this.pushOneWorldEvent();
     }
-    console.log('world ready', this.savedGame.world);
+    if (!this.world.next) {
+      this.findNextEvent();
+    }
     this.advanceTime();
     this.saveGame();
   }
 
   advanceTime() {
     let now = new Date().getTime();
-    console.log('now and world', now, this.world, now - this.world.events[0].timestamp);
-    while (now >= this.world.events[0].timestamp) {
+    while (now >= this.world.next) {
       this.pushOneWorldEvent();
-      let first:WorldEvent = this.world.events.splice(0, 1)[0];
-      WorldEvent.trigger(first, this);
-      console.log('now and world', now, this.world, now - this.world.events[0].timestamp);
+      this.findNextEvent();
     }
   }
 
-  pushOneWorldEvent() {
-    let latest = this.world.events[this.world.events.length -1].timestamp;
-    //let latest = this.world.events.length > 0 ? this.world.events[this.world.events.length -1].timestamp : new Date().getTime();
+  findNextEvent() {
     let headcount = this.world.orcs.length;
     let quarters = 4 + headcount * headcount;
-    let delay = 1000 * 60 * 15 * (quarters + GamesCommonService.randomInt(0, quarters));
-    latest = latest + delay;
-    this.world.events.push({
+    let delay = 1000 * 60 * 60 * (quarters + GamesCommonService.randomInt(0, quarters));
+    this.world.next = this.world.last + delay;
+  }
+
+  pushOneWorldEvent() {
+    let we: WorldEvent = {
       code: 'orc',
-      timestamp: latest,
-    });
+      timestamp: this.world.next,
+    }
+    WorldEvent.trigger(we, this);
   }
 
 }

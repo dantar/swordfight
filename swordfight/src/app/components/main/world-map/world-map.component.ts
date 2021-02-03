@@ -30,6 +30,8 @@ export class WorldMapComponent implements OnInit {
     this.fightWon = null;    
     this.shared.dropEnemy();
     this.shared.world.orcs.splice(this.shared.world.orcs.indexOf(this.orc), 1);
+    this.shared.world.last = new Date().getTime();
+    this.shared.findNextEvent();
     this.shared.saveGame();
   }
 
