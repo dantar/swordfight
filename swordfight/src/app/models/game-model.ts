@@ -19,6 +19,11 @@ export class WorldMapStats {
     last: number;
     next: number;
 
+    life: number;
+    mana: number;
+  maxLife: number;
+  maxMana: number;
+
 }
 
 export class WorldEvent {

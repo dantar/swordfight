@@ -62,11 +62,11 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
   hits: number;
 
   constructor(
+    public shared: SharedDataService,
     private games: GamesCommonService,
     private audio: AudioPlayService,
     private tickers: TickersService,
     private swords: SwordsService,
-    private shared: SharedDataService,
     private changes: ChangeDetectorRef,
   ) { }
 
@@ -89,7 +89,6 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
     this.sequence = [];
     this.audio.play(this.swords.sound('ready'));
     this.finishedSequence();
-    this.hits = 20;
     this.totalScore = 0;
     this.score = this.shared.swingSpeedScore;
     this.swordState = 'rest';
@@ -201,8 +200,8 @@ export class DuelButtonsComponent implements OnInit, OnDestroy {
 
   hitsStartCountUp(update: number) {
     this.tickers.loop('hits', update, () => {
-      this.hits --;
-      if (this.hits < 0) {
+      this.shared.yourLife = Math.max(0, this.shared.yourLife - 1);
+      if (this.shared.yourLife <= 0) {
         this.loseMatch();
         this.changes.detectChanges();
       }

@@ -19,14 +19,22 @@ export class WorldMapComponent implements OnInit {
   }
 
   clickOrc(orc: WorldOrc) {
+    if (this.shared.world.life > 0) {
+      this.startFight(orc);
+    }
+  }
+  startFight(orc: WorldOrc) {
     this.orc = orc;
     this.shared.fightEnemy({
       maxSequenceLength: orc.swings,
       locked: false,
     });
+    this.shared.yourMaxLife = this.shared.world.maxLife;
+    this.shared.yourLife = this.shared.world.life;
   }
 
   clickAckWin() {
+    this.shared.world.life = this.shared.yourLife;
     this.fightWon = null;    
     this.shared.dropEnemy();
     this.shared.world.orcs.splice(this.shared.world.orcs.indexOf(this.orc), 1);
@@ -36,6 +44,7 @@ export class WorldMapComponent implements OnInit {
   }
 
   clickAckLose() {
+    this.shared.world.life = this.shared.yourLife;
     this.fightWon = null;    
     this.shared.dropEnemy();
     this.shared.saveGame();

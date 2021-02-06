@@ -16,6 +16,8 @@ export class SharedDataService {
   enemyMaxSequenceLength: number;
   enemySwingDelay: number;
   enemySwingBonus: number;
+  yourLife: number;
+  yourMaxLife: number;
 
   enemies: EnemyFighterStats[];
   enemy: EnemyFighterStats;
@@ -79,6 +81,8 @@ export class SharedDataService {
 
   private _setupstats() {
     this.enemyMaxSequenceLength = this.enemy.maxSequenceLength;
+    this.yourMaxLife = 20;
+    this.yourLife = this.yourMaxLife;
   }
 
   fightEnemy(enemy: EnemyFighterStats) {
@@ -102,11 +106,19 @@ export class SharedDataService {
     this.enemies = null;
     if (this.savedGame.world && this.savedGame.world.last && this.savedGame.world.next && this.savedGame.world.orcs) {
       this.world = this.savedGame.world;
+      this.world.maxLife =  this.world.maxLife ? this.world.maxLife : 10;
+      this.world.maxMana =  this.world.maxMana ? this.world.maxMana : 1000;
+      this.world.life =  this.world.life || this.world.life === 0 ? this.world.life : this.world.maxLife;
+      this.world.mana = this.world.mana ? this.world.mana : 0;
     } else {
       this.world = {
         orcs: [],
         last: new Date().getTime(),
         next: null,
+        life: 10,
+        mana: 0,
+        maxLife : 10,
+        maxMana: 1000,
       }
     }
     if (!this.world.next) {
@@ -119,9 +131,21 @@ export class SharedDataService {
   advanceTime() {
     let now = new Date().getTime();
     while (now >= this.world.next) {
+      let delta = this.world.next - this.world.last;
+      this.gainLife(delta);
+      this.gainMana(delta);
       this.pushOneWorldEvent();
       this.findNextEvent();
     }
+  }
+  gainLife(delta: number) {
+    this.world.life = Math.min(this.world.maxLife, this.world.life + Math.floor(this.minutes(delta) / 15));
+  }
+  gainMana(delta: number) {
+    this.world.mana = Math.min(this.world.maxMana, this.world.mana + Math.floor(this.minutes(delta) / 15 / (1 + this.world.orcs.length)));
+  }
+  minutes(delta: number) {
+    return delta / 1000 / 60 / 60;
   }
 
   findNextEvent() {
