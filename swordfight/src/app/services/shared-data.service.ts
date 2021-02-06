@@ -137,15 +137,18 @@ export class SharedDataService {
       this.pushOneWorldEvent();
       this.findNextEvent();
     }
+    this.gainLife(now - this.world.last);
+    this.gainMana(now - this.world.last);
+    this.world.last = now;
   }
   gainLife(delta: number) {
     this.world.life = Math.min(this.world.maxLife, this.world.life + Math.floor(this.minutes(delta) / 15));
   }
   gainMana(delta: number) {
-    this.world.mana = Math.min(this.world.maxMana, this.world.mana + Math.floor(this.minutes(delta) / 15 / (1 + this.world.orcs.length)));
+    this.world.mana = Math.min(this.world.maxMana, this.world.mana + Math.floor(this.minutes(delta) / (1 + this.world.orcs.length)));
   }
   minutes(delta: number) {
-    return delta / 1000 / 60 / 60;
+    return delta / 1000 / 60;
   }
 
   findNextEvent() {
