@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -25,6 +25,15 @@ import { WorldMapComponent } from './components/main/world-map/world-map.compone
 import { FullpageMenuComponent } from './components/main/fullpage-menu/fullpage-menu.component';
 import { OrcTrainingComponent } from './components/main/orc-training/orc-training.component';
 import { MenuToggleComponent } from './components/buttons/menu-toggle/menu-toggle.component';
+
+import * as Hammer from 'hammerjs';
+
+export class MyHammerConfig extends HammerGestureConfig {
+  overrides = <any>{
+    swipe: { direction: Hammer.DIRECTION_ALL },
+    pinch: { enabled: true },
+  };
+}
 
 @NgModule({
   declarations: [
@@ -53,9 +62,11 @@ import { MenuToggleComponent } from './components/buttons/menu-toggle/menu-toggl
     AppRoutingModule,
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    HammerModule,
   ],
   providers: [
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig },
   ],
   bootstrap: [AppComponent]
 })

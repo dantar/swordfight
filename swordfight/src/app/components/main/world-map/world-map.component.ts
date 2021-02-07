@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WorldOrc } from 'src/app/models/game-model';
+import { WorldFeature, WorldHex, WorldOrc } from 'src/app/models/game-model';
 import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
@@ -9,6 +9,11 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
 })
 export class WorldMapComponent implements OnInit {
 
+  panx: number;
+  pany: number;
+  translatex: number;
+  translatey: number;
+
   orc: WorldOrc;
   fightWon: boolean;
 
@@ -16,6 +21,10 @@ export class WorldMapComponent implements OnInit {
 
   ngOnInit(): void {
     this.fightWon = null;
+    this.translatex = 0;
+    this.translatey = 0;
+    this.panx = 0;
+    this.pany = 0;
   }
 
   clickOrc(orc: WorldOrc) {
@@ -48,6 +57,36 @@ export class WorldMapComponent implements OnInit {
     this.fightWon = null;    
     this.shared.dropEnemy();
     this.shared.saveGame();
+  }
+
+  onPan(event: any) {
+    console.log('pan', event);
+    this.panx = event.deltaX;
+    this.pany = event.deltaY;
+    if (event.isFinal) {
+      this.translatex = this.translatex + this.panx;
+      this.translatey = this.translatey + this.pany;
+      this.panx = 0;
+      this.pany = 0;
+      console.log('FINAL pan', event);
+    }
+  }
+
+  transformMap(): string {
+    return `translate(${this.translatex + this.panx} ${this.translatey + this.pany}) translate(40 40)`;
+  }
+
+  transformOrc(orc: WorldOrc): string {
+    return this.transformHex({x: orc.x, y: orc.y});
+  }
+
+  transformHex(hex: WorldHex): string {
+    let scale = 0.2;
+    return `translate(${(WorldHex.shift(hex) ? 50 * scale : 0) + hex.x * 100 * scale} ${hex.y * 100 * scale}) scale(${scale})`
+  }
+
+  clickFeature(feature: WorldFeature) {
+    console.log(feature);
   }
 
 }

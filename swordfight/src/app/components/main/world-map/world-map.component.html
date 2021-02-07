@@ -15,6 +15,22 @@
     <div style="height: 140px;"></div>
 </div>
 
+<svg class="fullsvg" viewBox="0 0 100 100" (pan)="onPan($event)">
+    <defs>
+        <g id="feature-shrine"><circle cx="50" cy="50" r="50" style="fill:gold;"></circle></g>
+        <g id="feature-tree"><circle cx="50" cy="50" r="50" style="fill:seagreen;"></circle></g>
+        <g id="feature-bush"><circle cx="50" cy="50" r="50" style="fill:burlywood;"></circle></g>
+        <g id="feature-grass"><circle cx="50" cy="50" r="50" style="fill:greenyellow;"></circle></g>
+        <g id="feature-stone"><circle cx="50" cy="50" r="50" style="fill:gray;"></circle></g>
+    </defs>
+    <g [attr.transform]="transformMap()">
+        <g *ngFor="let feature of shared.world.features" (click)="clickFeature(feature)" [attr.transform]="transformHex(feature.hex)">
+            <use [attr.href]="'#feature-' + feature.code"></use>
+        </g>
+        <g app-icon-orc *ngFor="let orc of shared.world.orcs" (click)="clickOrc(orc)" [attr.transform]="transformOrc(orc)"></g>
+    </g>
+</svg>
+
 <app-duel-buttons *ngIf="shared.enemy" (youWin)="fightWon = $event"></app-duel-buttons>
 
 <div class="fullpage" *ngIf="fightWon != null">

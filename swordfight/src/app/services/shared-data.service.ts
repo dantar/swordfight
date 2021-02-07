@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { WorldEvent, WorldMapStats, WorldOrc } from '../models/game-model';
+import { WorldEvent, WorldFeature, WorldHex, WorldMapStats, WorldOrc } from '../models/game-model';
 import { GamesCommonService } from './games-common.service';
 
 @Injectable({
@@ -104,28 +104,45 @@ export class SharedDataService {
   }
   switchToWorldMap() {
     this.enemies = null;
-    if (this.savedGame.world && this.savedGame.world.last && this.savedGame.world.next && this.savedGame.world.orcs) {
+    if (this.savedGame.world) {
       this.world = this.savedGame.world;
-      this.world.maxLife =  this.world.maxLife ? this.world.maxLife : 10;
-      this.world.maxMana =  this.world.maxMana ? this.world.maxMana : 1000;
-      this.world.life =  this.world.life || this.world.life === 0 ? this.world.life : this.world.maxLife;
-      this.world.mana = this.world.mana ? this.world.mana : 0;
+      WorldMapStats.fix(this.world);
     } else {
-      this.world = {
+      this.world = new WorldMapStats({
         orcs: [],
+        features: [],
         last: new Date().getTime(),
         next: null,
         life: 10,
         mana: 0,
         maxLife : 10,
         maxMana: 1000,
-      }
+      });
+    }
+    if (this.world.features.length === 0) {
+      this.generateWorldFeatures();
     }
     if (!this.world.next) {
       this.findNextEvent();
     }
     this.advanceTime();
     this.saveGame();
+  }
+
+  generateWorldFeatures() {
+    let featurePicker = new FeaturePicker();
+    let shrine = new WorldFeature({hex: {x: 0, y:0}, code: 'shrine'});
+    this.world.features.push(shrine);
+    WorldHex.neighbours(shrine.hex)
+    .filter(h => !this.world.features.map(f=>WorldHex.id(f.hex)).includes(WorldHex.id(h)))
+    .forEach(h => {
+      this.world.features.push(featurePicker.pickForHex(h));
+      WorldHex.neighbours(h)
+      .filter(h => !this.world.features.map(f=>WorldHex.id(f.hex)).includes(WorldHex.id(h)))
+      .forEach(h => this.world.features.push(featurePicker.pickForHex(h)))
+      ;
+    })
+    ;
   }
 
   advanceTime() {
@@ -174,6 +191,17 @@ export class SharedDataService {
     WorldEvent.trigger(we, this);
   }
 
+}
+
+export class FeaturePicker {
+  palette = ['tree', 'tree', 'bush', 'grass', 'stone'];
+  features: string[] = [];
+  pickForHex(h: WorldHex): WorldFeature {
+    if (this.features.length == 0) {
+      this.features = this.palette.map(f=>f);
+    }
+    return {hex: h, code: GamesCommonService.randomPick(this.features)};
+  }
 }
 
 export class EnemyFighterStats {

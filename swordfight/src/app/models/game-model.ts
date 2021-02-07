@@ -16,15 +16,79 @@ export class ActionButton {
 export class WorldMapStats {
 
     orcs: WorldOrc[];
+    features: WorldFeature[];
     last: number;
     next: number;
 
+    maxLife: number;
+    maxMana: number;
     life: number;
     mana: number;
-  maxLife: number;
-  maxMana: number;
+
+    constructor(data: WorldMapStats) {
+        WorldMapStats.fix(this);
+    }
+
+    static fix(data: WorldMapStats) {
+        data.orcs = data.orcs ? data.orcs : [];
+        data.features = data.features ? data.features.map(f => new WorldFeature(f)) : [];
+        data.last = data.last ? data.last : new Date().getTime();
+        data.next = data.next ? data.next : null;
+        data.maxLife =  data.maxLife ? data.maxLife : 10;
+        data.maxMana =  data.maxMana ? data.maxMana : 1000;
+        data.life =  data.life || data.life === 0 ? data.life : data.maxLife;
+        data.mana = data.mana ? data.mana : 0;
+    }
 
 }
+
+export class WorldFeature {
+    hex: WorldHex;
+    code: string;
+
+    constructor(data: WorldFeature) {
+        this.hex = new WorldHex(data.hex);
+        this.code = data.code;
+    }
+}
+
+export class WorldHex {
+    static neighbours(hex: WorldHex): WorldHex[] {
+        let shiftedx = WorldHex.shift(hex) ? hex.x : hex.x-1;
+      return [
+          new WorldHex({x: hex.x-1, y: hex.y}),
+          new WorldHex({x: shiftedx, y: hex.y-1}),
+          new WorldHex({x: shiftedx+1, y: hex.y-1}),
+          new WorldHex({x: hex.x+1, y: hex.y}),
+          new WorldHex({x: shiftedx+1, y: hex.y+1}),
+          new WorldHex({x: shiftedx, y: hex.y+1}),
+      ];
+    }
+
+    x: number;
+    y: number;
+
+    constructor(data: WorldHex) {
+        this.x = data.x;
+        this.y = data.y;
+    }
+
+    static id(hex: WorldHex): string {
+        return `${hex.x}:${hex.y}`;
+    }
+    id?(): string {
+        return WorldHex.id(this);
+    }
+
+    static shift(hex: WorldHex): boolean {
+        return Math.abs((hex.y % 2)) === 1;
+    }
+    shift?(): boolean {
+        return WorldHex.shift(this);
+    }
+
+}
+
 
 export class WorldEvent {
     static trigger(we: WorldEvent, shared: SharedDataService) {
