@@ -89,14 +89,19 @@ export class WorldHex {
 
 }
 
-
 export class WorldEvent {
     static trigger(we: WorldEvent, shared: SharedDataService) {
         if (we.code === 'orc') {
+            let hex = GamesCommonService.randomPick(
+                shared.world.features.filter(f => 
+                    shared.world.orcs
+                    .map(orc => WorldHex.id({x: orc.x, y: orc.y}))
+                    .includes(WorldHex.id(f.hex))
+                )).hex;
             let orc: WorldOrc = {
                 swings: GamesCommonService.randomInt(1 + shared.world.orcs.length, Math.min(10, 6+shared.world.orcs.length)),
-                x: GamesCommonService.randomInt(1, 100),
-                y: GamesCommonService.randomInt(1, 100),
+                x: hex.x,
+                y: hex.y,
             };
             shared.world.orcs.push(orc);
             if (shared.world.orcs.length > 8) {

@@ -200,7 +200,7 @@ export class FeaturePicker {
     if (this.features.length == 0) {
       this.features = this.palette.map(f=>f);
     }
-    return {hex: h, code: GamesCommonService.randomPick(this.features)};
+    return {hex: h, code: GamesCommonService.randomPop(this.features)};
   }
 }
 
