@@ -17,6 +17,9 @@ export class WorldMapComponent implements OnInit {
   orc: WorldOrc;
   fightWon: boolean;
 
+  innerWidth: number;
+  innerHeight: number;
+
   constructor(public shared: SharedDataService) { }
 
   ngOnInit(): void {
@@ -25,6 +28,8 @@ export class WorldMapComponent implements OnInit {
     this.translatey = 0;
     this.panx = 0;
     this.pany = 0;
+    this.innerWidth = window.innerWidth;
+    this.innerHeight = window.innerHeight;
   }
 
   clickOrc(orc: WorldOrc) {
@@ -61,8 +66,9 @@ export class WorldMapComponent implements OnInit {
 
   onPan(event: any) {
     console.log('pan', event);
-    this.panx = event.deltaX;
-    this.pany = event.deltaY;
+    let ratio = 100 / Math.min(this.innerWidth, this.innerHeight);
+    this.panx = event.deltaX * ratio;
+    this.pany = event.deltaY * ratio;
     if (event.isFinal) {
       this.translatex = this.translatex + this.panx;
       this.translatey = this.translatey + this.pany;
