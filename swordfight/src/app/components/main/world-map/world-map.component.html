@@ -27,7 +27,7 @@
         <g *ngFor="let feature of shared.world.features" (click)="clickFeature(feature)" [attr.transform]="transformHex(feature.hex)">
             <use [attr.href]="'#feature-' + feature.code"></use>
         </g>
-        <g app-icon-orc *ngFor="let orc of shared.world.orcs" (click)="clickOrc(orc)" [attr.transform]="transformOrc(orc)"></g>
+        <g app-icon-orc *ngFor="let orc of shared.world.orcs" (click)="clickOrc(orc)" [attr.transform]="transformHex(orc.hex)"></g>
     </g>
 </svg>
 

@@ -82,10 +82,6 @@ export class WorldMapComponent implements OnInit {
     return `translate(${this.translatex + this.panx} ${this.translatey + this.pany}) translate(40 40)`;
   }
 
-  transformOrc(orc: WorldOrc): string {
-    return this.transformHex({x: orc.x, y: orc.y});
-  }
-
   transformHex(hex: WorldHex): string {
     let scale = 0.2;
     return `translate(${(WorldHex.shift(hex) ? 50 * scale : 0) + hex.x * 100 * scale} ${hex.y * 100 * scale}) scale(${scale})`

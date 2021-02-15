@@ -170,13 +170,13 @@ export class SharedDataService {
 
   findNextEvent() {
     let delays: number[] = [
-      1000 * 60 * 5, 
       1000 * 60 * 10, 
       1000 * 60 * 15, 
       1000 * 60 * 30, 
       1000 * 60 * 60, 
       1000 * 60 * 60 * 4, 
       1000 * 60 * 60 * 12, 
+      1000 * 60 * 60 * 24, 
     ]
     let headcount = Math.min(delays.length-1, this.world.orcs.length);
     let delay = delays[headcount] * (GamesCommonService.randomInt(1, 6) + GamesCommonService.randomInt(1, 6));

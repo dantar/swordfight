@@ -30,7 +30,7 @@ export class WorldMapStats {
     }
 
     static fix(data: WorldMapStats) {
-        data.orcs = data.orcs ? data.orcs : [];
+        data.orcs = data.orcs ? WorldOrc.filterValid(data.orcs) : [];
         data.features = data.features ? data.features.map(f => new WorldFeature(f)) : [];
         data.last = data.last ? data.last : new Date().getTime();
         data.next = data.next ? data.next : null;
@@ -94,14 +94,13 @@ export class WorldEvent {
         if (we.code === 'orc') {
             let hex = GamesCommonService.randomPick(
                 shared.world.features.filter(f => 
-                    shared.world.orcs
-                    .map(orc => WorldHex.id({x: orc.x, y: orc.y}))
+                    !shared.world.orcs
+                    .map(orc => WorldHex.id(orc.hex))
                     .includes(WorldHex.id(f.hex))
                 )).hex;
             let orc: WorldOrc = {
                 swings: GamesCommonService.randomInt(1 + shared.world.orcs.length, Math.min(10, 6+shared.world.orcs.length)),
-                x: hex.x,
-                y: hex.y,
+                hex: hex,
             };
             shared.world.orcs.push(orc);
             if (shared.world.orcs.length > 8) {
@@ -121,9 +120,11 @@ export class WorldEvent {
 }
 
 export class WorldOrc {
+    static filterValid(orcs: WorldOrc[]): WorldOrc[] {
+        return orcs.filter(o => o.hex);
+    }
 
-    x: number;
-    y: number;
+    hex: WorldHex;
     swings: number;
 
 }
