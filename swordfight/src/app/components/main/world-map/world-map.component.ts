@@ -20,6 +20,8 @@ export class WorldMapComponent implements OnInit {
   innerWidth: number;
   innerHeight: number;
 
+  currentFeature: WorldFeature;
+
   constructor(public shared: SharedDataService) { }
 
   ngOnInit(): void {
@@ -30,6 +32,7 @@ export class WorldMapComponent implements OnInit {
     this.pany = 0;
     this.innerWidth = window.innerWidth;
     this.innerHeight = window.innerHeight;
+    this.currentFeature = null;
   }
 
   clickOrc(orc: WorldOrc) {
@@ -65,7 +68,6 @@ export class WorldMapComponent implements OnInit {
   }
 
   onPan(event: any) {
-    console.log('pan', event);
     let ratio = 100 / Math.min(this.innerWidth, this.innerHeight);
     this.panx = event.deltaX * ratio;
     this.pany = event.deltaY * ratio;
@@ -74,7 +76,6 @@ export class WorldMapComponent implements OnInit {
       this.translatey = this.translatey + this.pany;
       this.panx = 0;
       this.pany = 0;
-      console.log('FINAL pan', event);
     }
   }
 
@@ -88,7 +89,7 @@ export class WorldMapComponent implements OnInit {
   }
 
   clickFeature(feature: WorldFeature) {
-    console.log(feature);
+    this.currentFeature = feature;
   }
 
 }

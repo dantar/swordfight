@@ -27,6 +27,8 @@ import { OrcTrainingComponent } from './components/main/orc-training/orc-trainin
 import { MenuToggleComponent } from './components/buttons/menu-toggle/menu-toggle.component';
 
 import * as Hammer from 'hammerjs';
+import { FeatureShrineComponent } from './components/world/feature-shrine/feature-shrine.component';
+import { FeaturePlaceholderComponent } from './components/world/feature-placeholder/feature-placeholder.component';
 
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any>{
@@ -56,6 +58,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     FullpageMenuComponent,
     OrcTrainingComponent,
     MenuToggleComponent,
+    FeatureShrineComponent,
+    FeaturePlaceholderComponent,
   ],
   imports: [
     BrowserModule,
