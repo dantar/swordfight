@@ -3,10 +3,31 @@
 .button {
     background-color: rgba(0,0,0,0.5);
     margin: 3px;
-    border: 1px solid gray;
     padding: 3px;
     display: flex; 
     flex-direction: row; 
     flex-wrap: wrap; 
     justify-content: center;
+    color: gray;
+    border: 1px solid gray;
+    &.enabled-true {
+        color: white;
+        border: 1px solid white;
+    }
+    &.enabled-false {
+        color: gray;
+        border: 1px solid gray;
+    }
+}
+
+.section {
+    background-color: rgba(0,0,0,0.5);
+    margin: 3px;
+    padding: 3px;
+    display: flex; 
+    flex-direction: row; 
+    flex-wrap: wrap; 
+    justify-content: center;
+    color: gray;
+    border: 1px solid gray;
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WorldEvent, WorldFeature, WorldHex, WorldMapStats, WorldOrc } from '../models/game-model';
 import { GamesCommonService } from './games-common.service';
+import { WorldFeaturesService } from './world-features.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,9 @@ export class SharedDataService {
   savedGame: SavedGame;
   showMenu: boolean;
 
-  constructor() {
+  constructor(
+    private features: WorldFeaturesService,
+  ) {
     this.showMenu = false;
     this.swingSpeedScore = 5;
     this.swingStepScore = 2;
@@ -117,11 +120,14 @@ export class SharedDataService {
         mana: 0,
         maxLife : 10,
         maxMana: 1000,
+        gainLifeTime: 0,
+        gainManaTime: 0,
       });
     }
     if (this.world.features.length === 0) {
       this.generateWorldFeatures();
     }
+    this.updateWorldStats();
     if (!this.world.next) {
       this.findNextEvent();
     }
@@ -131,7 +137,7 @@ export class SharedDataService {
 
   generateWorldFeatures() {
     let featurePicker = new FeaturePicker();
-    let shrine = new WorldFeature({hex: {x: 0, y:0}, code: 'shrine'});
+    let shrine = new WorldFeature({hex: {x: 0, y:0}, code: 'shrine', tags: []});
     this.world.features.push(shrine);
     WorldHex.neighbours(shrine.hex)
     .filter(h => !this.world.features.map(f=>WorldHex.id(f.hex)).includes(WorldHex.id(h)))
@@ -143,6 +149,21 @@ export class SharedDataService {
       ;
     })
     ;
+  }
+
+  updateWorldStats() {
+    this.world.maxMana = 1000;
+    this.world.maxLife = 10;
+    this.world.features
+    .filter(f => this.features.items[f.code])
+    .forEach(f => {
+      if (this.features.items[f.code].effects.maxmana) {
+        this.features.items[f.code].effects.maxmana(f, this);
+      }
+      if (this.features.items[f.code].effects.maxlife) {
+        this.features.items[f.code].effects.maxlife(f, this);
+      }
+    });
   }
 
   advanceTime() {
@@ -159,13 +180,20 @@ export class SharedDataService {
     this.world.last = now;
   }
   gainLife(delta: number) {
-    this.world.life = Math.min(this.world.maxLife, this.world.life + Math.floor(this.minutes(delta) / 15));
+    this.world.gainLifeTime = (this.world.gainLifeTime ? this.world.gainLifeTime: 0) + delta;
+    let timeCost = 1000 * 60 * 15;
+    while (this.world.gainLifeTime >= timeCost) {
+      this.world.life = Math.min(this.world.maxLife, this.world.life + 1);
+      this.world.gainLifeTime = this.world.gainLifeTime - timeCost;
+    }
   }
   gainMana(delta: number) {
-    this.world.mana = Math.min(this.world.maxMana, this.world.mana + Math.floor(this.minutes(delta) / (1 + this.world.orcs.length)));
-  }
-  minutes(delta: number) {
-    return delta / 1000 / 60;
+    this.world.gainManaTime = (this.world.gainManaTime ? this.world.gainManaTime: 0) + delta;
+    let timeCost = 1000 * 60 * (1 + this.world.orcs.length);
+    while (this.world.gainManaTime >= timeCost) {
+      this.world.mana = Math.min(this.world.maxMana, this.world.mana + 1);
+      this.world.gainManaTime = this.world.gainManaTime - timeCost;
+    }
   }
 
   findNextEvent() {
@@ -191,6 +219,16 @@ export class SharedDataService {
     WorldEvent.trigger(we, this);
   }
 
+  // world methods
+
+  spendMana(v: number) {
+    this.world.mana = Math.max(0, this.world.mana - v);
+  }
+
+  checkMana(v: number): boolean {
+    return this.world.mana > v;
+  }
+
 }
 
 export class FeaturePicker {
@@ -200,7 +238,7 @@ export class FeaturePicker {
     if (this.features.length == 0) {
       this.features = this.palette.map(f=>f);
     }
-    return {hex: h, code: GamesCommonService.randomPop(this.features)};
+    return {hex: h, code: GamesCommonService.randomPop(this.features), tags: []};
   }
 }
 

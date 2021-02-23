@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WorldFeature, WorldHex, WorldOrc } from 'src/app/models/game-model';
 import { SharedDataService } from 'src/app/services/shared-data.service';
+import { WorldFeatureAdvancement, WorldFeaturesService } from 'src/app/services/world-features.service';
 
 @Component({
   selector: 'app-world-map',
@@ -22,7 +23,10 @@ export class WorldMapComponent implements OnInit {
 
   currentFeature: WorldFeature;
 
-  constructor(public shared: SharedDataService) { }
+  constructor(
+    public shared: SharedDataService,
+    public features: WorldFeaturesService,
+    ) { }
 
   ngOnInit(): void {
     this.fightWon = null;
@@ -92,4 +96,20 @@ export class WorldMapComponent implements OnInit {
     this.currentFeature = feature;
   }
 
+  findAdvancements(): WorldFeatureAdvancement[] {
+    if (this.features.items[this.currentFeature.code]) {
+      return this.features.items[this.currentFeature.code].advancements(this.currentFeature, this.shared);
+    }
+    return [];
+  }
+
+  clickBuyAdvancement(advancement: WorldFeatureAdvancement) {
+    if (advancement.affordable(this.currentFeature, this.shared)) {
+      advancement.pay(this.currentFeature, this.shared);
+      this.shared.updateWorldStats();
+      this.shared.saveGame();
+    }
+  }
+
 }
+

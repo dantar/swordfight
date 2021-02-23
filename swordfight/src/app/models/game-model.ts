@@ -20,10 +20,14 @@ export class WorldMapStats {
     last: number;
     next: number;
 
+    life: number;
+    gainLifeTime: number;
+    mana: number;
+    gainManaTime: number;
+
+    // updated stats
     maxLife: number;
     maxMana: number;
-    life: number;
-    mana: number;
 
     constructor(data: WorldMapStats) {
         WorldMapStats.fix(this);
@@ -45,11 +49,14 @@ export class WorldMapStats {
 export class WorldFeature {
     hex: WorldHex;
     code: string;
+    tags: string[];
 
     constructor(data: WorldFeature) {
         this.hex = new WorldHex(data.hex);
         this.code = data.code;
+        this.tags = data.tags || [];
     }
+
 }
 
 export class WorldHex {

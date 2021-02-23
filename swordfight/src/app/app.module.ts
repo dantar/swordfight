@@ -29,6 +29,8 @@ import { MenuToggleComponent } from './components/buttons/menu-toggle/menu-toggl
 import * as Hammer from 'hammerjs';
 import { FeatureShrineComponent } from './components/world/feature-shrine/feature-shrine.component';
 import { FeaturePlaceholderComponent } from './components/world/feature-placeholder/feature-placeholder.component';
+import { FeatureTreeComponent } from './components/world/feature-tree/feature-tree.component';
+import { FeatureStoneComponent } from './components/world/feature-stone/feature-stone.component';
 
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any>{
@@ -60,6 +62,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     MenuToggleComponent,
     FeatureShrineComponent,
     FeaturePlaceholderComponent,
+    FeatureTreeComponent,
+    FeatureStoneComponent,
   ],
   imports: [
     BrowserModule,

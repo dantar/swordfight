@@ -32,6 +32,18 @@
         <div style="height: 140px;"></div>
     </div>
     <div class="splithalf">
+        <div class="button">
+            {{currentFeature.code}}
+        </div>
+        <div class="button" *ngFor="let tag of currentFeature.tags">
+            {{tag}}
+        </div>
+        <div class="section" *ngFor="let advancement of findAdvancements()">
+            {{advancement.description}}
+            <div class="button enabled-{{advancement.affordable(currentFeature, shared)}}" (click)="clickBuyAdvancement(advancement)">
+                {{advancement.cost(currentFeature, shared)}}
+            </div>
+        </div>
         <div style="height: 140px;"></div>
     </div>
 </div>
