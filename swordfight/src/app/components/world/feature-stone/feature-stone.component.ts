@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { WorldFeature } from 'src/app/models/game-model';
 import { SharedDataService } from 'src/app/services/shared-data.service';
 import { WorldFeatureAdvancement, WorldFeaturesService } from 'src/app/services/world-features.service';
 
 @Component({
-  selector: 'app-feature-stone',
+  selector: '[app-feature-stone]',
   templateUrl: './feature-stone.component.html',
   styleUrls: ['./feature-stone.component.scss']
 })
 export class FeatureStoneComponent implements OnInit {
+
+  @Input() feature: WorldFeature;
 
   constructor() { }
 
@@ -41,7 +43,7 @@ WorldFeaturesService.registerItem(
     },
     effects: {
       maxmana: (feature: WorldFeature, shared: SharedDataService) => {
-        shared.world.maxMana = shared.world.maxLife + 1;
+        shared.world.maxLife = shared.world.maxLife + 1;
       }
     }
   }

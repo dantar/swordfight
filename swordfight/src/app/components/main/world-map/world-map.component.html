@@ -17,17 +17,28 @@
 
 <svg class="fullsvg" viewBox="0 0 100 100" (pan)="onPan($event)">
     <g [attr.transform]="transformMap()">
-        <g *ngFor="let feature of shared.world.features" (click)="clickFeature(feature)" [attr.transform]="transformHex(feature.hex)">
+        <g *ngFor="let feature of shared.world.features" (click)="clickFeature(feature)"
+            [attr.transform]="transformHex(feature.hex)">
+            <svg:circle r="142" cy="50" cx="50"
+                style="opacity:1;fill:#88aa00;fill-opacity:1;"></svg:circle>
+        </g>
+        <g *ngFor="let feature of shared.world.features" (click)="clickFeature(feature)"
+            [attr.transform]="transformHex(feature.hex)">
             <g app-feature-placeholder [feature]="feature"></g>
         </g>
-        <g app-icon-orc *ngFor="let orc of shared.world.orcs" (click)="clickOrc(orc)" [attr.transform]="transformHex(orc.hex)"></g>
+        <g app-icon-orc *ngFor="let orc of shared.world.orcs" (click)="clickOrc(orc)"
+            [attr.transform]="transformHex(orc.hex)"></g>
     </g>
 </svg>
 
 <div class="fullpage splitview" *ngIf="currentFeature">
     <div class="splithalf">
-        <svg viewBox="0 0 100 100" (click)="currentFeature = null">
-            <g app-feature-placeholder [feature]="currentFeature"></g>
+        <svg viewBox="0 0 160 160" (click)="currentFeature = null">
+            <svg:rect width="160" height="160" x="0" y="0"
+                style="opacity:1;vector-effect:none;fill:#88aa00;fill-opacity:1;stroke:#88aa00;stroke-width:0.92735308;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
+            <g transform="translate(30 30)">
+                <g app-feature-placeholder [feature]="currentFeature"></g>
+            </g>
         </svg>
         <div style="height: 140px;"></div>
     </div>
@@ -40,7 +51,8 @@
         </div>
         <div class="section" *ngFor="let advancement of findAdvancements()">
             {{advancement.description}}
-            <div class="button enabled-{{advancement.affordable(currentFeature, shared)}}" (click)="clickBuyAdvancement(advancement)">
+            <div class="button enabled-{{advancement.affordable(currentFeature, shared)}}"
+                (click)="clickBuyAdvancement(advancement)">
                 {{advancement.cost(currentFeature, shared)}}
             </div>
         </div>

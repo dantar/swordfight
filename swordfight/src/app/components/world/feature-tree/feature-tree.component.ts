@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { WorldFeature } from 'src/app/models/game-model';
 import { SharedDataService } from 'src/app/services/shared-data.service';
 import { WorldFeatureAdvancement, WorldFeaturesService } from 'src/app/services/world-features.service';
 
 @Component({
-  selector: 'app-feature-tree',
+  selector: '[app-feature-tree]',
   templateUrl: './feature-tree.component.html',
   styleUrls: ['./feature-tree.component.scss']
 })
 export class FeatureTreeComponent implements OnInit {
+
+  @Input() feature: WorldFeature;
 
   constructor() { }
 
