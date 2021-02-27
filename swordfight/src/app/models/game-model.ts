@@ -30,12 +30,24 @@ export class WorldMapStats {
     maxMana: number;
 
     constructor(data: WorldMapStats) {
+        this.orcs = data.orcs;
+        this.features = data.features;
+        this.last = data.last;
+        this.next = data.next;
+        this.life = data.life;
+        this.gainLifeTime = data.gainLifeTime;
+        this.mana = data.mana;
+        this.gainManaTime = data.gainManaTime;
+        this.maxLife = data.maxLife;
+        this.maxMana = data.maxMana;
         WorldMapStats.fix(this);
     }
 
     static fix(data: WorldMapStats) {
         data.orcs = data.orcs ? WorldOrc.filterValid(data.orcs) : [];
-        data.features = data.features ? data.features.map(f => new WorldFeature(f)) : [];
+        data.features = data.features ? data.features
+        .map(f => new WorldFeature(f))
+        .sort((a,b) => WorldHex.compare(a.hex,b.hex)) : [];
         data.last = data.last ? data.last : new Date().getTime();
         data.next = data.next ? data.next : null;
         data.maxLife =  data.maxLife ? data.maxLife : 10;
@@ -60,16 +72,27 @@ export class WorldFeature {
 }
 
 export class WorldHex {
-    static neighbours(hex: WorldHex): WorldHex[] {
-        let shiftedx = WorldHex.shift(hex) ? hex.x : hex.x-1;
-      return [
-          new WorldHex({x: hex.x-1, y: hex.y}),
-          new WorldHex({x: shiftedx, y: hex.y-1}),
-          new WorldHex({x: shiftedx+1, y: hex.y-1}),
-          new WorldHex({x: hex.x+1, y: hex.y}),
-          new WorldHex({x: shiftedx+1, y: hex.y+1}),
-          new WorldHex({x: shiftedx, y: hex.y+1}),
-      ];
+    static compare(a: WorldHex, b: WorldHex): number {
+        if (a.y === b.y) {
+            return a.x === b.x ? 0: a.x > b.x? 1:-1;
+        } else {
+            return a.y > b.y? 1:-1;
+        }
+    }
+    static neighbours(hex: WorldHex, steps=1): WorldHex[] {
+        let result: WorldHex[] = [];
+        for (let y = - steps; y <= steps; y++) {
+            let ro = Math.abs(y);
+            let deltax = steps - ro;
+            let lowerx = hex.x - (WorldHex.shift(hex) ? Math.floor(ro/2): Math.ceil(ro/2));
+            let higherx = hex.x + (WorldHex.shift(hex) ? Math.ceil(ro/2): Math.floor(ro/2));
+            for (let x = lowerx - deltax; x <= higherx+deltax; x++) {
+                if (x != hex.x || y != hex.y) {
+                    result.push({x:x , y:y});
+                };
+            }
+        }
+        return result;
     }
 
     x: number;
@@ -92,6 +115,18 @@ export class WorldHex {
     }
     shift?(): boolean {
         return WorldHex.shift(this);
+    }
+    static upleft(hex: WorldHex, steps = 1): WorldHex {
+        return new WorldHex({x: hex.x - (WorldHex.shift(hex)?Math.floor(steps/2):Math.ceil(steps/2)), y: hex.y - steps});
+    }
+    static upright(hex: WorldHex, steps = 1): WorldHex {
+        return new WorldHex({x: hex.x + (WorldHex.shift(hex)?Math.ceil(steps/2):Math.floor(steps/2)), y: hex.y - steps});
+    }
+    static downleft(hex: WorldHex, steps = 1): WorldHex {
+        return new WorldHex({x: hex.x - (WorldHex.shift(hex)?Math.floor(steps/2):Math.ceil(steps/2)), y: hex.y + steps});
+    }
+    static downright(hex: WorldHex, steps = 1): WorldHex {
+        return new WorldHex({x: hex.x + (WorldHex.shift(hex)?Math.ceil(steps/2):Math.floor(steps/2)), y: hex.y + steps});
     }
 
 }

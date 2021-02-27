@@ -59,6 +59,9 @@ export class SharedDataService {
   }
 
   saveGame() {
+    if (!this.savedGame) {
+      this.savedGame = new SavedGame();
+    }
     this.savedGame.version = '1.0';
     this.savedGame.showAllSwingButtons = this.showAllSwingButtons;
     this.savedGame.showLastSwingButtons = this.showLastSwingButtons;
@@ -129,7 +132,7 @@ export class SharedDataService {
     }
     this.updateWorldStats();
     if (!this.world.next) {
-      this.findNextEvent();
+      this.world.next = new Date().getTime();
     }
     this.advanceTime();
     this.saveGame();
@@ -139,16 +142,10 @@ export class SharedDataService {
     let featurePicker = new FeaturePicker();
     let shrine = new WorldFeature({hex: {x: 0, y:0}, code: 'shrine', tags: []});
     this.world.features.push(shrine);
-    WorldHex.neighbours(shrine.hex)
-    .filter(h => !this.world.features.map(f=>WorldHex.id(f.hex)).includes(WorldHex.id(h)))
-    .forEach(h => {
-      this.world.features.push(featurePicker.pickForHex(h));
-      WorldHex.neighbours(h)
-      .filter(h => !this.world.features.map(f=>WorldHex.id(f.hex)).includes(WorldHex.id(h)))
-      .forEach(h => this.world.features.push(featurePicker.pickForHex(h)))
-      ;
-    })
+    WorldHex.neighbours(shrine.hex, 2)
+    .forEach(h => this.world.features.push(featurePicker.pickForHex(h)))
     ;
+    this.world.features.sort((a,b) => WorldHex.compare(a.hex,b.hex));
   }
 
   updateWorldStats() {
