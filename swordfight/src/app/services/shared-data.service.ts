@@ -138,6 +138,10 @@ export class SharedDataService {
     this.saveGame();
   }
 
+  resetWorld() {
+    this.savedGame.world = null;
+  }
+
   generateWorldFeatures() {
     let featurePicker = new FeaturePicker();
     let shrine = new WorldFeature({hex: {x: 0, y:0}, code: 'shrine', tags: []});

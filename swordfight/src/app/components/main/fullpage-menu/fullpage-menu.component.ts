@@ -23,4 +23,10 @@ export class FullpageMenuComponent implements OnInit {
     this.shared.switchToTraining();
   }
 
+  clickResetWorld() {
+    this.shared.showMenu = false;
+    this.shared.resetWorld();
+    this.shared.switchToWorldMap();
+  }
+
 }
