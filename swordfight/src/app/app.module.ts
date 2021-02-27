@@ -31,6 +31,7 @@ import { FeatureShrineComponent } from './components/world/feature-shrine/featur
 import { FeaturePlaceholderComponent } from './components/world/feature-placeholder/feature-placeholder.component';
 import { FeatureTreeComponent } from './components/world/feature-tree/feature-tree.component';
 import { FeatureStoneComponent } from './components/world/feature-stone/feature-stone.component';
+import { PixieComponent } from './components/world/pixie/pixie.component';
 
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any>{
@@ -64,6 +65,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     FeaturePlaceholderComponent,
     FeatureTreeComponent,
     FeatureStoneComponent,
+    PixieComponent,
   ],
   imports: [
     BrowserModule,

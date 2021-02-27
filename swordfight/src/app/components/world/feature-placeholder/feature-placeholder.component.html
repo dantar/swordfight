@@ -3,4 +3,6 @@
 <svg:g *ngIf="feature.code === 'stone'" app-feature-stone [feature]="feature"></svg:g>
 <svg:g *ngIf="feature.code === 'bush'" id="feature-bush"><svg:circle cx="50" cy="50" r="50" style="fill:burlywood;"></svg:circle></svg:g>
 <svg:g *ngIf="feature.code === 'grass'" id="feature-grass"><svg:circle cx="50" cy="50" r="50" style="fill:greenyellow;"></svg:circle></svg:g>
-
+<svg:g *ngFor="let pixie of allPixies()">
+    <svg:g app-pixie></svg:g>
+</svg:g>

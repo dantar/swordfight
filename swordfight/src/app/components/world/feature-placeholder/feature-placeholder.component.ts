@@ -17,4 +17,8 @@ export class FeaturePlaceholderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  allPixies(): string[] {
+    return this.feature.tags.filter(f => f.startsWith('incantato'));
+  }
+
 }
