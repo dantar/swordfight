@@ -227,7 +227,7 @@ export class SharedDataService {
   }
 
   checkMana(v: number): boolean {
-    return this.world.mana > v;
+    return this.world.mana >= v;
   }
 
 }

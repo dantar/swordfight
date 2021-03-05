@@ -43,7 +43,7 @@ WorldFeaturesService.registerItem(
     },
     effects: {
       maxmana: (feature: WorldFeature, shared: SharedDataService) => {
-        shared.world.maxLife = shared.world.maxLife + (1 * feature.tags.filter(t => t.startsWith('incantato')).length);
+        shared.world.maxLife = shared.world.maxLife + (1 * feature.tags.filter(t => t.startsWith('robusto')).length);
       }
     }
   }
