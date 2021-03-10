@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ClipboardService } from 'src/app/services/clipboard.service';
 import { SharedDataService } from 'src/app/services/shared-data.service';
 
 @Component({
@@ -8,7 +9,8 @@ import { SharedDataService } from 'src/app/services/shared-data.service';
 })
 export class FullpageMenuComponent implements OnInit {
 
-  constructor(private shared: SharedDataService) { }
+  constructor(private shared: SharedDataService,
+    private clipboard: ClipboardService) { }
 
   ngOnInit(): void {
   }
@@ -29,4 +31,7 @@ export class FullpageMenuComponent implements OnInit {
     this.shared.switchToWorldMap();
   }
 
+  clickCopySavedGame() {
+    this.clipboard.copyText(localStorage.getItem('swordfight-saved'));
+  }
 }
